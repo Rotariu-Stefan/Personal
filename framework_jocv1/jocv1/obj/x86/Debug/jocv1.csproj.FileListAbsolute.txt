@@ -1,0 +1,25 @@
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\bin\Debug\jocv1.exe
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\bin\Debug\jocv1.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.Properties.Resources.resources
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.exe
+c:\users\stravos\documents\visual studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.pdb
+C:\Users\StravoS\Documents\Visual Studio 2010\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.Form1.resources
+D:\INFO\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.exe
+D:\INFO\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.pdb
+D:\INFO\Projects\jocv1\jocv1\bin\Debug\jocv1.exe
+D:\INFO\Projects\jocv1\jocv1\bin\Debug\jocv1.pdb
+D:\INFO\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.Form1.resources
+D:\INFO\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.Properties.Resources.resources
+D:\INFO\Projects\jocv1\jocv1\obj\x86\Debug\jocv1.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\bin\Debug\jocv1.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\bin\Debug\jocv1.pdb
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.csprojResolveAssemblyReference.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.Form1.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.Properties.Resources.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.csproj.CoreCompileInputs.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\framework_jocv1\jocv1\obj\x86\Debug\jocv1.pdb

@@ -1,0 +1,25 @@
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\bin\Debug\Arb.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\bin\Debug\Arb.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\Arb.Properties.Resources.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\Arb.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\Arb.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\Arb\Arb\obj\x86\Debug\Arb.ArbForm.resources
+D:\INFO\Projects\Arb\Arb\obj\x86\Debug\Arb.exe
+D:\INFO\Projects\Arb\Arb\obj\x86\Debug\Arb.pdb
+D:\INFO\Projects\Arb\Arb\bin\Debug\Arb.exe
+D:\INFO\Projects\Arb\Arb\bin\Debug\Arb.pdb
+D:\INFO\Projects\Arb\Arb\obj\x86\Debug\Arb.ArbForm.resources
+D:\INFO\Projects\Arb\Arb\obj\x86\Debug\Arb.Properties.Resources.resources
+D:\INFO\Projects\Arb\Arb\obj\x86\Debug\Arb.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\bin\Debug\Arb.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\bin\Debug\Arb.pdb
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.csprojResolveAssemblyReference.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.ArbForm.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.Properties.Resources.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.csproj.CoreCompileInputs.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Arb\Arb\obj\x86\Debug\Arb.pdb

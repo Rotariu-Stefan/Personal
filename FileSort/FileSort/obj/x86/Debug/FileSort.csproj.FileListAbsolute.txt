@@ -1,0 +1,16 @@
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\bin\Debug\FileSort.exe
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\bin\Debug\FileSort.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.Form1.resources
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.Properties.Resources.resources
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.exe
+c:\users\stravos\documents\visual studio 2010\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.pdb
+D:\INFO\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.exe
+D:\INFO\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.pdb
+D:\INFO\Projects\FileSort\FileSort\bin\Debug\FileSort.exe
+D:\INFO\Projects\FileSort\FileSort\bin\Debug\FileSort.pdb
+D:\INFO\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.Form1.resources
+D:\INFO\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.Properties.Resources.resources
+D:\INFO\Projects\FileSort\FileSort\obj\x86\Debug\FileSort.csproj.GenerateResource.Cache

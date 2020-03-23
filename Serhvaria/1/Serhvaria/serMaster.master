@@ -1,0 +1,52 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="serMaster.master.cs" Inherits="serMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <title>Master Page</title>
+    <link rel="stylesheet" type="text/css" href="~/serStyle.css"/>
+</head>
+
+<body>
+
+<table style="width: 1200px">
+<tr>
+
+    <td style="width: 900px; vertical-align:bottom"">
+    <table id="mainTable">
+        <tr><td align="center" colspan="5" id="mainName"><h1>Serhvaria</h1></td></tr>
+        <tr>
+            <td><a href="Home.aspx" class="mainLink">| Home |</a></td>
+            <td><a href="About.aspx" class="mainLink">| About |</a></td>
+            <td><a href="Forum.aspx" class="mainLink">| Forum |</a></td>
+            <td><a href="Rules.aspx" class="mainLink">| Rules |</a></td>
+            <td><a href="Leaderboards.aspx" class="mainLink">| Leaderboards |</a></td>
+        </tr>
+    </table>
+    </td>
+
+    <td style="width: 600px; vertical-align:bottom">
+    <table id="userTable">
+        <tr><td align="center" colspan="4" id="userName" runat="server">Username</td></tr>
+        <tr><td align="center" colspan="4"><form action="LogReg.aspx" method="post"><input type="submit" id="userState" name="userState" value="(user state)" runat="server"/></form></td></tr>
+        <tr>
+            <td><a href="Game.aspx" class="userGameLink">| Game |</a></td>
+            <td><a href="Uprofile.aspx" class="userLink">| User Profile |</a></td>
+            <td><a href="" class="userLink">| Messages |</a></td>
+        </tr>
+    </table>
+    </td>
+
+</tr>
+</table>
+
+<br />
+<asp:Label Text="OUTPUT MESSAGE !" ID="lOut" runat="server" BackColor="Yellow"></asp:Label>
+<br />
+<asp:contentplaceholder id="mainBody" runat="server" />
+
+</body>
+
+</html>

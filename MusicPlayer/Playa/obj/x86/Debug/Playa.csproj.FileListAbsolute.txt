@@ -1,0 +1,31 @@
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\bin\Debug\Playa.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\bin\Debug\Playa.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\Playa.Form1.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\Playa.Properties.Resources.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\Playa.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\Playa.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\Interop.WMPLib.dll
+c:\users\stravos\documents\visual studio 2010\Projects\Playa\Playa\obj\x86\Debug\Playa.csproj.ResolveComReference.cache
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Interop.WMPLib.dll
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Playa.csproj.ResolveComReference.cache
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Playa.exe
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Playa.pdb
+D:\INFO\Projects\Playa\Playa\bin\Debug\Playa.exe
+D:\INFO\Projects\Playa\Playa\bin\Debug\Playa.pdb
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Playa.Form1.resources
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Playa.Properties.Resources.resources
+D:\INFO\Projects\Playa\Playa\obj\x86\Debug\Playa.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\bin\Debug\Playa.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\bin\Debug\Playa.pdb
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.csprojResolveAssemblyReference.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Interop.WMPLib.dll
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.csproj.ResolveComReference.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.Form1.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.Properties.Resources.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.csproj.CoreCompileInputs.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Playa\Playa\obj\x86\Debug\Playa.pdb

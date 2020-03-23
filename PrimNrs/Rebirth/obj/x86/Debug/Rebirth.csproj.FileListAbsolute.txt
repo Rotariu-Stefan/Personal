@@ -1,0 +1,25 @@
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\bin\Debug\Rebirth.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\bin\Debug\Rebirth.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.Form1.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.Properties.Resources.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.pdb
+D:\INFO\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.exe
+D:\INFO\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.pdb
+D:\INFO\Projects\Rebirth\Rebirth\bin\Debug\Rebirth.exe
+D:\INFO\Projects\Rebirth\Rebirth\bin\Debug\Rebirth.pdb
+D:\INFO\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.Form1.resources
+D:\INFO\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.Properties.Resources.resources
+D:\INFO\Projects\Rebirth\Rebirth\obj\x86\Debug\Rebirth.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\bin\Debug\Rebirth.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\bin\Debug\Rebirth.pdb
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.csprojResolveAssemblyReference.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.Form1.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.Properties.Resources.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.csproj.CoreCompileInputs.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\PrimNrs\Rebirth\obj\x86\Debug\Rebirth.pdb

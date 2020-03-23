@@ -1,0 +1,25 @@
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\bin\Debug\Touch.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\bin\Debug\Touch.pdb
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\Touch.Form1.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\Touch.Properties.Resources.resources
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\Touch.exe
+c:\users\stravos\documents\visual studio 2010\Projects\Touch\Touch\obj\x86\Debug\Touch.pdb
+D:\INFO\Projects\Touch\Touch\obj\x86\Debug\Touch.exe
+D:\INFO\Projects\Touch\Touch\obj\x86\Debug\Touch.pdb
+D:\INFO\Projects\Touch\Touch\bin\Debug\Touch.exe
+D:\INFO\Projects\Touch\Touch\bin\Debug\Touch.pdb
+D:\INFO\Projects\Touch\Touch\obj\x86\Debug\Touch.Form1.resources
+D:\INFO\Projects\Touch\Touch\obj\x86\Debug\Touch.Properties.Resources.resources
+D:\INFO\Projects\Touch\Touch\obj\x86\Debug\Touch.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\bin\Debug\Touch.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\bin\Debug\Touch.pdb
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.csprojResolveAssemblyReference.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.Form1.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.Properties.Resources.resources
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.csproj.GenerateResource.Cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.csproj.CoreCompileInputs.cache
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.exe
+F:\STIIIIIIICKS\PRODUCTIONS\INFO\HOME\Touch\Touch\obj\x86\Debug\Touch.pdb

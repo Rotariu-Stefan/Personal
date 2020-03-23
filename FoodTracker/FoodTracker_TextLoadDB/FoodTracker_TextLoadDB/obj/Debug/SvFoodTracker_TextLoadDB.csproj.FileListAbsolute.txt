@@ -1,0 +1,11 @@
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\bin\Debug\FoodTracker_TextLoadDB.exe.config
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\bin\Debug\FoodTracker_TextLoadDB.exe
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\bin\Debug\FoodTracker_TextLoadDB.pdb
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\FoodTracker_TextLoadDB.Properties.Resources.resources
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\SvFoodTracker_TextLoadDB.csproj.GenerateResource.Cache
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\SvFoodTracker_TextLoadDB.csproj.CoreCompileInputs.cache
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\FoodTracker_TextLoadDB.exe
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\FoodTracker_TextLoadDB.pdb
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\SvFoodTracker_TextLoadDB.csprojResolveAssemblyReference.cache
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\FoodTracker_TextLoadDB.AddDayForm.resources
+F:\SvProduction\FoodTracker_TextLoadDB\FoodTracker_TextLoadDB\obj\Debug\FoodTracker_TextLoadDB.MainForm.resources

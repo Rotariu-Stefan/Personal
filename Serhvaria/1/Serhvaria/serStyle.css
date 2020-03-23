@@ -1,0 +1,21 @@
+﻿table
+{
+    border-collapse:collapse;
+    
+    margin-left:auto;
+    margin-right:auto;
+}
+td
+{
+    border:1px solid #000;
+    
+    text-align:center;
+}
+#mainTable
+{
+    margin-left:20px;
+}
+#userTable
+{
+    margin-right:20px;
+}

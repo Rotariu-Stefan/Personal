@@ -1,0 +1,16 @@
+D:\Prgs\Stats\Stats\bin\Debug\Stats.exe
+D:\Prgs\Stats\Stats\bin\Debug\Stats.pdb
+D:\Prgs\Stats\Stats\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Prgs\Stats\Stats\obj\x86\Debug\Stats.Form1.resources
+D:\Prgs\Stats\Stats\obj\x86\Debug\Stats.Properties.Resources.resources
+D:\Prgs\Stats\Stats\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\Prgs\Stats\Stats\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\Prgs\Stats\Stats\obj\x86\Debug\Stats.exe
+D:\Prgs\Stats\Stats\obj\x86\Debug\Stats.pdb
+D:\INFO\Prgs\Stats\Stats\obj\x86\Debug\Stats.exe
+D:\INFO\Prgs\Stats\Stats\obj\x86\Debug\Stats.pdb
+D:\INFO\Prgs\Stats\Stats\bin\Debug\Stats.exe
+D:\INFO\Prgs\Stats\Stats\bin\Debug\Stats.pdb
+D:\INFO\Prgs\Stats\Stats\obj\x86\Debug\Stats.Form1.resources
+D:\INFO\Prgs\Stats\Stats\obj\x86\Debug\Stats.Properties.Resources.resources
+D:\INFO\Prgs\Stats\Stats\obj\x86\Debug\Stats.csproj.GenerateResource.Cache

@@ -67,15 +67,17 @@
             this.button_WTF = new System.Windows.Forms.Button();
             this.button_setMealNote = new System.Windows.Forms.Button();
             this.label_subtitle = new System.Windows.Forms.Label();
+            this.button_setMealPortion = new System.Windows.Forms.Button();
+            this.label_portion = new System.Windows.Forms.Label();
+            this.button_undo = new System.Windows.Forms.Button();
+            this.button_cancel = new System.Windows.Forms.Button();
+            this.textBox_portion = new FoodTracker_TextLoadDB.tbpaste();
             this.textBox_noteMealScore = new FoodTracker_TextLoadDB.tbpaste();
             this.textBox_noteScore = new FoodTracker_TextLoadDB.tbpaste();
             this.textBox_amount = new FoodTracker_TextLoadDB.tbpaste();
             this.textBox_protein = new FoodTracker_TextLoadDB.tbpaste();
             this.textBox_carbs = new FoodTracker_TextLoadDB.tbpaste();
             this.textBox_fat = new FoodTracker_TextLoadDB.tbpaste();
-            this.button_setMealPortion = new System.Windows.Forms.Button();
-            this.textBox_portion = new FoodTracker_TextLoadDB.tbpaste();
-            this.label_portion = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button_addMeal
@@ -148,7 +150,7 @@
             this.output.Location = new System.Drawing.Point(12, 405);
             this.output.Name = "output";
             this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(540, 206);
+            this.output.Size = new System.Drawing.Size(540, 399);
             this.output.TabIndex = 43;
             this.output.Text = "";
             // 
@@ -274,7 +276,7 @@
             // button_commit
             // 
             this.button_commit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_commit.Location = new System.Drawing.Point(12, 620);
+            this.button_commit.Location = new System.Drawing.Point(12, 810);
             this.button_commit.Name = "button_commit";
             this.button_commit.Size = new System.Drawing.Size(93, 23);
             this.button_commit.TabIndex = 20;
@@ -421,7 +423,7 @@
             // 
             // button_WTF
             // 
-            this.button_WTF.Location = new System.Drawing.Point(477, 621);
+            this.button_WTF.Location = new System.Drawing.Point(252, 811);
             this.button_WTF.Name = "button_WTF";
             this.button_WTF.Size = new System.Drawing.Size(75, 23);
             this.button_WTF.TabIndex = 44;
@@ -449,70 +451,6 @@
             this.label_subtitle.TabIndex = 1;
             this.label_subtitle.Text = "xx(note text)";
             // 
-            // textBox_noteMealScore
-            // 
-            this.textBox_noteMealScore.Location = new System.Drawing.Point(77, 165);
-            this.textBox_noteMealScore.Name = "textBox_noteMealScore";
-            this.textBox_noteMealScore.pasted = false;
-            this.textBox_noteMealScore.Size = new System.Drawing.Size(40, 20);
-            this.textBox_noteMealScore.TabIndex = 4;
-            this.textBox_noteMealScore.TextChanged += new System.EventHandler(this.textBox_noteMealScore_TextChanged);
-            this.textBox_noteMealScore.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_noteMealScore_KeyPress);
-            // 
-            // textBox_noteScore
-            // 
-            this.textBox_noteScore.Location = new System.Drawing.Point(77, 87);
-            this.textBox_noteScore.Name = "textBox_noteScore";
-            this.textBox_noteScore.pasted = false;
-            this.textBox_noteScore.Size = new System.Drawing.Size(40, 20);
-            this.textBox_noteScore.TabIndex = 0;
-            this.textBox_noteScore.TextChanged += new System.EventHandler(this.textBox_noteScore_TextChanged);
-            this.textBox_noteScore.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_noteScore_KeyPress);
-            // 
-            // textBox_amount
-            // 
-            this.textBox_amount.Location = new System.Drawing.Point(141, 208);
-            this.textBox_amount.Name = "textBox_amount";
-            this.textBox_amount.pasted = false;
-            this.textBox_amount.ReadOnly = true;
-            this.textBox_amount.Size = new System.Drawing.Size(40, 20);
-            this.textBox_amount.TabIndex = 9;
-            this.textBox_amount.TextChanged += new System.EventHandler(this.textBox_amount_TextChanged);
-            this.textBox_amount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_amount_KeyPress);
-            // 
-            // textBox_protein
-            // 
-            this.textBox_protein.Location = new System.Drawing.Point(483, 367);
-            this.textBox_protein.Name = "textBox_protein";
-            this.textBox_protein.pasted = false;
-            this.textBox_protein.ReadOnly = true;
-            this.textBox_protein.Size = new System.Drawing.Size(29, 20);
-            this.textBox_protein.TabIndex = 16;
-            this.textBox_protein.TextChanged += new System.EventHandler(this.textBox_protein_TextChanged);
-            this.textBox_protein.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_protein_KeyPress);
-            // 
-            // textBox_carbs
-            // 
-            this.textBox_carbs.Location = new System.Drawing.Point(409, 367);
-            this.textBox_carbs.Name = "textBox_carbs";
-            this.textBox_carbs.pasted = false;
-            this.textBox_carbs.ReadOnly = true;
-            this.textBox_carbs.Size = new System.Drawing.Size(29, 20);
-            this.textBox_carbs.TabIndex = 15;
-            this.textBox_carbs.TextChanged += new System.EventHandler(this.textBox_carbs_TextChanged);
-            this.textBox_carbs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_carbs_KeyPress);
-            // 
-            // textBox_fat
-            // 
-            this.textBox_fat.Location = new System.Drawing.Point(333, 367);
-            this.textBox_fat.Name = "textBox_fat";
-            this.textBox_fat.pasted = false;
-            this.textBox_fat.ReadOnly = true;
-            this.textBox_fat.Size = new System.Drawing.Size(29, 20);
-            this.textBox_fat.TabIndex = 14;
-            this.textBox_fat.TextChanged += new System.EventHandler(this.textBox_fat_TextChanged);
-            this.textBox_fat.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_fat_KeyPress);
-            // 
             // button_setMealPortion
             // 
             this.button_setMealPortion.Enabled = false;
@@ -524,17 +462,6 @@
             this.button_setMealPortion.UseVisualStyleBackColor = true;
             this.button_setMealPortion.Click += new System.EventHandler(this.button_setMealPortion_Click);
             // 
-            // textBox_portion
-            // 
-            this.textBox_portion.Location = new System.Drawing.Point(141, 139);
-            this.textBox_portion.Name = "textBox_portion";
-            this.textBox_portion.pasted = false;
-            this.textBox_portion.Size = new System.Drawing.Size(40, 20);
-            this.textBox_portion.TabIndex = 46;
-            this.textBox_portion.Text = "1";
-            this.textBox_portion.TextChanged += new System.EventHandler(this.textBox_portion_TextChanged);
-            this.textBox_portion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_portion_KeyPress);
-            // 
             // label_portion
             // 
             this.label_portion.AutoSize = true;
@@ -544,11 +471,117 @@
             this.label_portion.TabIndex = 47;
             this.label_portion.Text = "Portion:";
             // 
+            // button_undo
+            // 
+            this.button_undo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_undo.Location = new System.Drawing.Point(503, 405);
+            this.button_undo.Name = "button_undo";
+            this.button_undo.Size = new System.Drawing.Size(55, 23);
+            this.button_undo.TabIndex = 48;
+            this.button_undo.Text = "Undo";
+            this.button_undo.UseVisualStyleBackColor = true;
+            this.button_undo.Click += new System.EventHandler(this.button_undo_Click);
+            // 
+            // button_cancel
+            // 
+            this.button_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_cancel.Location = new System.Drawing.Point(458, 811);
+            this.button_cancel.Name = "button_cancel";
+            this.button_cancel.Size = new System.Drawing.Size(93, 23);
+            this.button_cancel.TabIndex = 49;
+            this.button_cancel.Text = "Cancel";
+            this.button_cancel.UseVisualStyleBackColor = true;
+            this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
+            // 
+            // textBox_portion
+            // 
+            this.textBox_portion.dot = false;
+            this.textBox_portion.Location = new System.Drawing.Point(141, 139);
+            this.textBox_portion.Name = "textBox_portion";
+            this.textBox_portion.pasted = false;
+            this.textBox_portion.Size = new System.Drawing.Size(40, 20);
+            this.textBox_portion.TabIndex = 46;
+            this.textBox_portion.Text = "1";
+            this.textBox_portion.TextChanged += new System.EventHandler(this.textBox_portion_TextChanged);
+            this.textBox_portion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_portion_KeyPress);
+            // 
+            // textBox_noteMealScore
+            // 
+            this.textBox_noteMealScore.dot = false;
+            this.textBox_noteMealScore.Location = new System.Drawing.Point(77, 165);
+            this.textBox_noteMealScore.Name = "textBox_noteMealScore";
+            this.textBox_noteMealScore.pasted = false;
+            this.textBox_noteMealScore.Size = new System.Drawing.Size(40, 20);
+            this.textBox_noteMealScore.TabIndex = 4;
+            this.textBox_noteMealScore.TextChanged += new System.EventHandler(this.textBox_noteMealScore_TextChanged);
+            this.textBox_noteMealScore.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_noteMealScore_KeyPress);
+            // 
+            // textBox_noteScore
+            // 
+            this.textBox_noteScore.dot = false;
+            this.textBox_noteScore.Location = new System.Drawing.Point(77, 87);
+            this.textBox_noteScore.Name = "textBox_noteScore";
+            this.textBox_noteScore.pasted = false;
+            this.textBox_noteScore.Size = new System.Drawing.Size(40, 20);
+            this.textBox_noteScore.TabIndex = 0;
+            this.textBox_noteScore.TextChanged += new System.EventHandler(this.textBox_noteScore_TextChanged);
+            this.textBox_noteScore.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_noteScore_KeyPress);
+            // 
+            // textBox_amount
+            // 
+            this.textBox_amount.dot = false;
+            this.textBox_amount.Location = new System.Drawing.Point(141, 208);
+            this.textBox_amount.Name = "textBox_amount";
+            this.textBox_amount.pasted = false;
+            this.textBox_amount.ReadOnly = true;
+            this.textBox_amount.Size = new System.Drawing.Size(40, 20);
+            this.textBox_amount.TabIndex = 9;
+            this.textBox_amount.TextChanged += new System.EventHandler(this.textBox_amount_TextChanged);
+            this.textBox_amount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_amount_KeyPress);
+            // 
+            // textBox_protein
+            // 
+            this.textBox_protein.dot = false;
+            this.textBox_protein.Location = new System.Drawing.Point(483, 367);
+            this.textBox_protein.Name = "textBox_protein";
+            this.textBox_protein.pasted = false;
+            this.textBox_protein.ReadOnly = true;
+            this.textBox_protein.Size = new System.Drawing.Size(29, 20);
+            this.textBox_protein.TabIndex = 16;
+            this.textBox_protein.TextChanged += new System.EventHandler(this.textBox_protein_TextChanged);
+            this.textBox_protein.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_protein_KeyPress);
+            // 
+            // textBox_carbs
+            // 
+            this.textBox_carbs.dot = false;
+            this.textBox_carbs.Location = new System.Drawing.Point(409, 367);
+            this.textBox_carbs.Name = "textBox_carbs";
+            this.textBox_carbs.pasted = false;
+            this.textBox_carbs.ReadOnly = true;
+            this.textBox_carbs.Size = new System.Drawing.Size(29, 20);
+            this.textBox_carbs.TabIndex = 15;
+            this.textBox_carbs.TextChanged += new System.EventHandler(this.textBox_carbs_TextChanged);
+            this.textBox_carbs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_carbs_KeyPress);
+            // 
+            // textBox_fat
+            // 
+            this.textBox_fat.dot = false;
+            this.textBox_fat.Location = new System.Drawing.Point(333, 367);
+            this.textBox_fat.Name = "textBox_fat";
+            this.textBox_fat.pasted = false;
+            this.textBox_fat.ReadOnly = true;
+            this.textBox_fat.Size = new System.Drawing.Size(29, 20);
+            this.textBox_fat.TabIndex = 14;
+            this.textBox_fat.TextChanged += new System.EventHandler(this.textBox_fat_TextChanged);
+            this.textBox_fat.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_fat_KeyPress);
+            // 
             // AddDayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 655);
+            this.ClientSize = new System.Drawing.Size(564, 845);
+            this.Controls.Add(this.button_cancel);
+            this.Controls.Add(this.button_undo);
             this.Controls.Add(this.textBox_portion);
             this.Controls.Add(this.label_portion);
             this.Controls.Add(this.button_setMealPortion);
@@ -654,5 +687,7 @@
         private System.Windows.Forms.Button button_setMealPortion;
         private tbpaste textBox_portion;
         private System.Windows.Forms.Label label_portion;
+        private System.Windows.Forms.Button button_undo;
+        private System.Windows.Forms.Button button_cancel;
     }
 }

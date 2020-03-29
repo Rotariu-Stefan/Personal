@@ -8,41 +8,32 @@ using System.Data;
 
 namespace FoodTracker_TextLoadDB
 {
-    class DBCommands    //TODO:Figure out how to NOT write open/close connection All the Time...
-                        //TODO:Function for SqlSelect Data+Insert etc. to modularise code?
-    {                   //TODO:Stop getting 1line at a time in multi row queries
-        public static int InsertFoodItems(FoodItem food)
+    public static class DBCommands  //has static methods to insert and select data to/from FoodTracker Database
+    {
+        private static String priceDefault; //constains default DB value for the Price of Food Items
+        public static void loadDefaults()   //select Sql Default Price value from database schema
         {
-            SqlConnection conn = new SqlConnection(DBHelper.getCnnString("FoodTracker"));
-            conn.Open();
+            DBHelper.conn.Open();
 
-            String comText = "SELECT * FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;";
-            SqlCommand sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@FoodName", food._name);
-            sql.Parameters.AddWithValue("@Brand", food._brand);
-            SqlDataReader reader = sql.ExecuteReader();
-            bool exists = reader.Read();
-            reader.Close();
-            sql.Dispose();
+            DataRowCollection rows = DBHelper.selectStatement("SELECT COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'FoodItems' AND COLUMN_NAME = 'Price';", null);
+            priceDefault = (String)rows[0][0];
+            priceDefault = priceDefault.Replace("((", "").Replace("))", "");    //cleans up the format to get actual value
 
-            if (exists)  //If FoodItem Already Exists Stop/do Nothing!
-            {
-                conn.Close();
+            DBHelper.conn.Close();
+        }
+
+        #region Inserts
+        private static int InsertFoodItem(FoodItem food)    //inserts one Food Item
+        {
+            SqlParameter[] sparams = new SqlParameter[] {
+                new SqlParameter("@FoodName", food._name),
+                new SqlParameter("@Brand", food._brand)};
+            DataRowCollection rows = DBHelper.selectStatement("SELECT * FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;", sparams);   //attempts to select This Food(the one tasked to be inserted) from FoodItems table
+            if (rows.Count != 0)  //If FoodItem Already Exists Stop/do Nothing!
                 return 0;
-            }
 
-            comText = "SELECT COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'FoodItems' AND COLUMN_NAME = 'Price';";
-            sql = new SqlCommand(comText, conn);
-            reader = sql.ExecuteReader();
-            reader.Read();
-            String priceDefault = (String)reader[0];
-            priceDefault = priceDefault.Replace("((", "").Replace("))", "");
-            reader.Close();
-            sql.Dispose();
-
-            comText = "INSERT INTO FoodItems VALUES (@FoodName, @Brand, @Fat, @Carbs, @Protein, @SizeInfo, @UserID, @Pic, @Price, @IsDish, @NoteID);";
-            sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddRange(new SqlParameter[] {
+            //insert this Food Item into FoodItems table with parameters
+            sparams = new SqlParameter[] {
                 new SqlParameter("@FoodName",food._name),
                 new SqlParameter("@Brand", food._brand),
                 new SqlParameter("@Fat", food._fat),
@@ -52,316 +43,322 @@ namespace FoodTracker_TextLoadDB
                 new SqlParameter("@UserID", 1),
                 new SqlParameter("@Pic", DBNull.Value),
                 new SqlParameter("@Price", priceDefault),
-                new SqlParameter("@IsDish", false),
-                new SqlParameter("@NoteID", DBNull.Value)
-            });
-
-            int affected = sql.ExecuteNonQuery();
-
-            sql.Dispose();
-            conn.Close();
-
-            return affected;
+                new SqlParameter("@IsDish", food is Dish?true:false),
+                new SqlParameter("@NoteID", DBNull.Value)};
+            return DBHelper.insertStatement(
+                "INSERT INTO FoodItems VALUES (@FoodName, @Brand, @Fat, @Carbs, @Protein, @SizeInfo, @UserID, @Pic, @Price, @IsDish, @NoteID);", sparams);
         }
-        public static int InsertFoodItems(List<FoodItem> foods)
-        {
+        private static int InsertDishData(Dish dish)    //inserts into DishData table the Food Entries(junctures) for this Dish
+        {   
             int affected = 0;
-            foreach (FoodItem food in foods)
-                affected += InsertFoodItems(food);
-            return affected;
-        }
-        private static int InsertMeal(MealEntry meal, DateTime date)
-        {
-            int affected = 0;
-            SqlConnection conn = new SqlConnection(DBHelper.getCnnString("FoodTracker"));
-            conn.Open();
 
-            String comText = "SELECT * FROM Meals WHERE MealName=@MealName AND TimeEaten=@TimeEaten;";
-            SqlCommand sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@MealName", meal._name);
-            sql.Parameters.AddWithValue("@TimeEaten", date);
-            SqlDataReader reader = sql.ExecuteReader();
-            bool exists = reader.Read();
-            reader.Close();
-            sql.Dispose();
-
-            if (exists)  //If Meal Already Exists Stop/do Nothing!
+            if (dish.ingredients.Count != 0)
             {
-                conn.Close();
-                return 0;
-            }
-
-            int noteID = 0;
-            if (meal._note.ToString() != "")
-            {
-                comText = "INSERT INTO Notes VALUES(@UserID, @Title, @Score, @NoteText, @OfDay);";
-                sql = new SqlCommand(comText, conn);
-                sql.Parameters.AddWithValue("@UserID", 1);
-                sql.Parameters.AddWithValue("@Title", "N");
-                sql.Parameters.AddWithValue("@Score", meal._note.gradeAverage());
-                sql.Parameters.AddWithValue("@NoteText", meal._note._text);
-                sql.Parameters.AddWithValue("@OfDay", DBNull.Value);
-                affected += sql.ExecuteNonQuery();
-                sql.Dispose();
-
-                comText = "SELECT IDENT_CURRENT ('Notes');";
-                sql = new SqlCommand(comText, conn);
-                reader = sql.ExecuteReader();
-                reader.Read();
-                noteID = Convert.ToInt32(reader[0]);
-                reader.Close();
-                sql.Dispose();
-            }
-
-            comText = "INSERT INTO Meals VALUES (@MealName, @TimeEaten, @Portion, @UserID, @NoteID);";
-            sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@MealName", meal._name);
-            sql.Parameters.AddWithValue("@TimeEaten", date.ToString("yyyy/MM/dd"));
-            sql.Parameters.AddWithValue("@Portion", meal._portion);
-            sql.Parameters.AddWithValue("@UserID", 1);
-            sql.Parameters.AddWithValue("@NoteID", (noteID == 0 ? (object)DBNull.Value : noteID));
-            affected += sql.ExecuteNonQuery();
-            sql.Dispose();
-
-
-            if (meal._foodEntries.Count > 0)
-            {
-                comText = "SELECT MealID FROM Meals WHERE MealName=@MealName AND TimeEaten=@TimeEaten;";
-                sql = new SqlCommand(comText, conn);
-                sql.Parameters.AddWithValue("@MealName", meal._name);
-                sql.Parameters.AddWithValue("@TimeEaten", date);
-                reader = sql.ExecuteReader();
-                reader.Read();
-                int mealID = (int)reader[0];
-                reader.Close();
-                sql.Dispose();
+                SqlParameter[] sparams = new SqlParameter[]{
+                    new SqlParameter("@FoodName", dish._name),
+                    new SqlParameter("@Brand", dish._brand)};
+                DataRowCollection rows = DBHelper.selectStatement("SELECT FoodID FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;", sparams);  //selects DishID from FoodItems based on Name&Brand
+                int dishID = Convert.ToInt32(rows[0][0]);
 
                 int foodID;
-                SqlCommand sqlGetFood = new SqlCommand("SELECT FoodID FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;", conn);
-                sqlGetFood.Parameters.AddWithValue("@FoodName", meal._foodEntries[0]._food._name);
-                sqlGetFood.Parameters.AddWithValue("@Brand", meal._foodEntries[0]._food._brand);
-                reader = sqlGetFood.ExecuteReader();
-                reader.Read();
-                foodID = (int)reader[0];
-                reader.Close();
-                sqlGetFood.Dispose();
-
-                sql = new SqlCommand();
-                comText = "INSERT INTO MealData VALUES (@MealID0, @FoodID0, @Amount0, @Measure0)";
-                sql.Parameters.AddWithValue("@MealID0", mealID);
-                sql.Parameters.AddWithValue("@FoodID0", foodID);
-                sql.Parameters.AddWithValue("@Amount0", meal._foodEntries[0]._amount);
-                sql.Parameters.AddWithValue("@Measure0", meal._foodEntries[0]._food._measure.ToString());
-
-                for (int i = 1; i < meal._foodEntries.Count; i++)
+                String comText = "INSERT INTO DishData VALUES";     //multirow Insert into DishData for Food Entries of this Dish
+                List<SqlParameter> sparamsMultiline = new List<SqlParameter>();     //multirow Parameter list for Food Entries of this Dish
+                sparamsMultiline.Add(new SqlParameter("@DishID", dishID));
+                for (int i = 0; i < dish.ingredients.Count; i++)
                 {
-                    sqlGetFood = new SqlCommand("SELECT FoodID FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;", conn);
-                    sqlGetFood.Parameters.AddWithValue("@FoodName", meal._foodEntries[i]._food._name);
-                    sqlGetFood.Parameters.AddWithValue("@Brand", meal._foodEntries[i]._food._brand);
-                    reader = sqlGetFood.ExecuteReader();
-                    reader.Read();
-                    foodID = (int)reader[0];
-                    reader.Close();
-                    sqlGetFood.Dispose();
+                    sparams = new SqlParameter[]{
+                        new SqlParameter("@FoodName", dish.ingredients[i]._food._name),
+                        new SqlParameter("@Brand", dish.ingredients[i]._food._brand)};
+                    rows = DBHelper.selectStatement("SELECT FoodID FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;", sparams);    //select from FoodItems FoodID for currect FoodEntry that need to be inserted
+                    foodID = Convert.ToInt32(rows[0][0]);
 
-                    comText += $", (@MealID{i}, @FoodID{i}, @Amount{i}, @Measure{i})";
-                    sql.Parameters.AddWithValue($"@MealID{i}", mealID);
-                    sql.Parameters.AddWithValue($"@FoodID{i}", foodID);
-                    sql.Parameters.AddWithValue($"@Amount{i}", meal._foodEntries[i]._amount);
-                    sql.Parameters.AddWithValue($"@Measure{i}", meal._foodEntries[i]._food._measure.ToString());
+                    comText += $" (@DishID, @FoodID{i}, @Amount{i}, @Measure{i}),";      //addidng current Food Entry values/parameters to insert statement
+                    sparamsMultiline.AddRange(new SqlParameter[] {
+                    new SqlParameter($"@FoodID{i}", foodID),
+                    new SqlParameter($"@Amount{i}", dish.ingredients[i]._amount),
+                    new SqlParameter($"@Measure{i}", dish.ingredients[i]._food._measure.ToString())});
                 }
-                comText += ";";
+                comText = comText.Remove(comText.Length - 1) + ";";     //replacing last comma with a ; for ending statement
 
-                sql.CommandText = comText;
-                sql.Connection = conn;
-                affected += sql.ExecuteNonQuery();
-                sql.Dispose();
+                affected += DBHelper.insertStatement(comText, sparamsMultiline.ToArray());      //executing the insert into DishData for all Food Entries of this Dish
             }
-            conn.Close();
-
             return affected;
         }
-        public static int InsertDays(DayEntry day)
-        {
+        public static int InsertFoodItems(List<FoodItem> foods) //Inserts multiple Food Items
+        {   
+            DBHelper.conn.Open();
+
+            int affected = 0;
+            int afftest = 0;    //used to see if food was actually inserted(already existed or not in DB)
+            List<Dish> pendingDishes = new List<Dish>();    //saves Dish in list to introduce DishData After all basic FoodItem data has been entered(so i can be referenced in FK after)
+            foreach (FoodItem food in foods)
+            {
+                afftest = InsertFoodItem(food);         //inserts FoodItem data
+                if (afftest!=0 && food is Dish)         //if food didn't already exist and is a dish save it in a list to later introduce DishData ingredients  
+                    pendingDishes.Add(food as Dish);
+                affected += afftest;
+            }
+            foreach (Dish dish in pendingDishes)
+                affected += InsertDishData(dish);           //inserts ingredient data in DishData juncture table for dishes
+
+            DBHelper.conn.Close();
+            return affected;
+        }
+        private static int InsertMeal(MealEntry meal, DateTime date)    //insert one MealEntry into DB
+        {   
             int affected = 0;
 
-            if (day._note.ToString() != "")
-            {
-                using (SqlConnection conn = new SqlConnection(DBHelper.getCnnString("FoodTracker")))
-                {
-                    conn.Open();
+            SqlParameter[] sparams = new SqlParameter[]{
+            new SqlParameter("@MealName", meal._name),
+            new SqlParameter("@TimeEaten", date)};
+            DataRowCollection rows = DBHelper.selectStatement("SELECT * FROM Meals WHERE MealName=@MealName AND TimeEaten=@TimeEaten;", sparams);   //attempts to select This Meal(the one tasked to be inserted) from Meals table
+            if (rows.Count != 0)  //If Meal Already Exists Stop/do Nothing!
+                return 0;
 
-                    using (SqlCommand sqlsel = new SqlCommand("SELECT * FROM Notes WHERE UserID=@UserID AND OfDay=@OfDay;", conn))
-                    {
-                        sqlsel.Parameters.AddWithValue("@UserID", 1);
-                        sqlsel.Parameters.AddWithValue("@OfDay", day._date.ToString("yyyy/MM/dd"));
-                        using (SqlDataReader reader = sqlsel.ExecuteReader())
-                        {
-                            if (!reader.Read())
-                            {
-                                reader.Close();
-                                using (SqlCommand sql = new SqlCommand("INSERT INTO Notes VALUES(@UserID, @Title, @Score, @NoteText, @OfDay);", conn))
-                                {
-                                    sql.Parameters.AddWithValue("@UserID", 1);
-                                    sql.Parameters.AddWithValue("@Title", "N");
-                                    sql.Parameters.AddWithValue("@Score", day._note.gradeAverage());
-                                    sql.Parameters.AddWithValue("@NoteText", day._note._text);
-                                    sql.Parameters.AddWithValue("@OfDay", day._date.ToString("yyyy/MM/dd"));
-                                    affected += sql.ExecuteNonQuery();
-                                }
-                            }
-                        }
-                    }
+            int noteID = 0;
+            if (meal._note.ToString() != "")    //if the Meal has a Note
+            {   
+                sparams = new SqlParameter[]{
+                new SqlParameter("@UserID", 1),
+                new SqlParameter("@Title", "N"),
+                new SqlParameter("@Score", meal._note.gradeAverage()),
+                new SqlParameter("@NoteText", meal._note._text),
+                new SqlParameter("@OfDay", DBNull.Value)};
+                affected += DBHelper.insertStatement("INSERT INTO Notes VALUES(@UserID, @Title, @Score, @NoteText, @OfDay);", sparams);     //inserts Note for this Meal
+
+                rows = DBHelper.selectStatement("SELECT IDENT_CURRENT ('Notes');", null);   //select last identity(PK) added for table Notes
+                noteID = Convert.ToInt32(rows[0][0]);
+            }
+
+            sparams = new SqlParameter[]{
+            new SqlParameter("@MealName", meal._name),
+            new SqlParameter("@TimeEaten", date.ToString("yyyy/MM/dd")),
+            new SqlParameter("@Portion", meal._portion),
+            new SqlParameter("@UserID", 1),
+            new SqlParameter("@NoteID", (noteID == 0 ? (object)DBNull.Value : noteID))};
+            affected += DBHelper.insertStatement("INSERT INTO Meals VALUES (@MealName, @TimeEaten, @Portion, @UserID, @NoteID);", sparams);     //inserts entry for table Meals
+
+            if (meal._foodEntries.Count != 0)
+            {
+                rows = DBHelper.selectStatement("SELECT IDENT_CURRENT ('Meals');", null);   //select last identity(PK) added for table Meals
+                int mealID = Convert.ToInt32(rows[0][0]);
+
+                int foodID;
+                String comText = "INSERT INTO MealData VALUES";     //multirow Insert into MealData for Food Entries of this Meal
+                List<SqlParameter> sparamsMultiline = new List<SqlParameter>();     //multirow Parameter list for Food Entries of this Meal
+                sparamsMultiline.Add(new SqlParameter("@MealID", mealID));
+                for (int i = 0; i < meal._foodEntries.Count; i++)
+                {
+                    sparams = new SqlParameter[]{
+                    new SqlParameter("@FoodName", meal._foodEntries[i]._food._name),
+                    new SqlParameter("@Brand", meal._foodEntries[i]._food._brand),
+                    };
+                    rows = DBHelper.selectStatement("SELECT FoodID FROM FoodItems WHERE FoodName=@FoodName AND Brand=@Brand;", sparams);    //select from FoodItems FoodID for currect FoodEntry that need to be inserted
+                    foodID = Convert.ToInt32(rows[0][0]);
+
+                    comText += $" (@MealID, @FoodID{i}, @Amount{i}, @Measure{i}),";      //addidng current Food Entry values/parameters to insert statement
+                    sparamsMultiline.AddRange(new SqlParameter[] {
+                    new SqlParameter($"@FoodID{i}", foodID),
+                    new SqlParameter($"@Amount{i}", meal._foodEntries[i]._amount),
+                    new SqlParameter($"@Measure{i}", meal._foodEntries[i]._food._measure.ToString())});
+                }
+                comText = comText.Remove(comText.Length - 1) + ";";     //replacing last comma with a ; for ending statement
+
+                affected += DBHelper.insertStatement(comText, sparamsMultiline.ToArray());      //executing the insert into MealData for all Food Entries of this Meal
+            }
+            return affected;
+        }
+        private static int InsertDay(DayEntry day)  //insert one Day Entry data into DB
+        {    
+            int affected = 0;
+
+            if (day._note.ToString() != "")     //attempts to select This Days Note the one tasked to be inserted) from Notes table
+            {   
+                SqlParameter[] sparams = new SqlParameter[] {
+                new SqlParameter("@UserID", 1),
+                new SqlParameter("@OfDay", day._date.ToString("yyyy/MM/dd"))};
+                DataRowCollection rows = DBHelper.selectStatement("SELECT * FROM Notes WHERE UserID=@UserID AND OfDay=@OfDay;", sparams); //if day already exists do nothing
+                if (rows.Count == 0)    //if note not found inside table..
+                {   
+                    sparams = new SqlParameter[] {
+                    new SqlParameter("@UserID", 1),
+                    new SqlParameter("@Title", "N"),
+                    new SqlParameter("@Score", day._note.gradeAverage()),
+                    new SqlParameter("@NoteText", day._note._text),
+                    new SqlParameter("@OfDay", day._date.ToString("yyyy/MM/dd"))};
+                    affected += DBHelper.insertStatement("INSERT INTO Notes VALUES(@UserID, @Title, @Score, @NoteText, @OfDay);", sparams); //insert Note for this Day into Notes with This Days Date
                 }
             }
 
-            foreach (MealEntry meal in day._mealEntries)
+            foreach (MealEntry meal in day._mealEntries)        //insert Meals for this Day
                 affected += InsertMeal(meal, day._date);
 
             return affected;
         }
-        public static int InsertDays(List<DayEntry> days)
-        {
+        public static int InsertDays(List<DayEntry> days)   //insert multiple Day Entry data into DB
+        {    
+            DBHelper.conn.Open();
+
             int affected = 0;
             foreach (DayEntry day in days)
-                affected += InsertDays(day);
+                affected += InsertDay(day);
+
+            DBHelper.conn.Close();
             return affected;
         }
+        #endregion
 
-        public static FoodItem SelectFoodItem(int FoodID, out int affected)
-        {
-            FoodItem food = null;
-            affected = 0;
-            SqlConnection conn = new SqlConnection(DBHelper.getCnnString("FoodTracker"));
-            conn.Open();
+        #region Selects
+        public static FoodItem SelectFoodItem(int FoodID, out int affected)     //selects one Food Item based on ID(PK)
+        {   
+            DBHelper.conn.Open();
 
-            SqlCommand sql = new SqlCommand("SELECT * FROM FoodItems WHERE FoodID=@FoodID;", conn);
-            sql.Parameters.AddWithValue("@FoodID", FoodID);
-            SqlDataReader reader = sql.ExecuteReader();
-            if (reader.Read())
-            {
-                food = new FoodItem(reader["FoodName"].ToString(), reader["Brand"].ToString(),
-                    Convert.ToInt32(reader["Fat"]), Convert.ToInt32(reader["Carbs"]), Convert.ToInt32(reader["Protein"]),
-                    reader["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces);
-                affected++;
+            SqlParameter[] sparams = new SqlParameter[] { new SqlParameter("@FoodID", FoodID) };
+            DataRowCollection rows = DBHelper.selectStatement("SELECT * FROM FoodItems WHERE FoodID=@FoodID;", sparams);
+            if (rows.Count == 1)    //if food with respective ID was found
+            {   
+                affected = 1;
+
+                if ((bool)rows[0]["IsDish"])    //if the food found is a Dish create a Dish
+                {   
+                    System.Windows.Forms.MessageBox.Show("CALL!!");
+                    Dish foodDish= new Dish(rows[0]["FoodName"].ToString(), rows[0]["Brand"].ToString(),
+                        (double)rows[0]["Fat"], (double)rows[0]["Carbs"], (double)rows[0]["Protein"],
+                        rows[0]["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces);
+
+                    rows = DBHelper.selectStatement("SELECT f.FoodName, f.Brand, f.Fat, f.Carbs, f.Protein, f.SizeInfo, dd.Amount " +
+                        "FROM FoodItems f JOIN DishData dd ON f.FoodID=dd.IngredientID WHERE dd.DishID=@FoodID;", sparams);   //select FoodItems associated with this MealID(DishID in DishData) from DishData
+                    foreach (DataRow row in rows)   //add the rows information as FoodEntry object to this newly made Dish
+                    {                        
+                        (foodDish as Dish).addFoodEntry(new FoodEntry(new FoodItem(row["FoodName"].ToString(), row["Brand"].ToString(),
+                            (double)row["Fat"], (double)row["Carbs"], (double)row["Protein"],
+                            row["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces), (double)row["Amount"]));
+                        affected++;
+                    }
+                    return foodDish;
+                }
+                else
+                {   //if the food found is not a Dish create a basic FoodItem
+                    return new FoodItem(rows[0]["FoodName"].ToString(), rows[0]["Brand"].ToString(),
+                        Convert.ToInt32(rows[0]["Fat"]), Convert.ToInt32(rows[0]["Carbs"]), Convert.ToInt32(rows[0]["Protein"]),
+                        rows[0]["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces);
+                }
             }
-
-            reader.Close();
-            sql.Dispose();
-            conn.Close();
-            return food;
-        }
-        private static MealEntry SelectMealEntry(int MealID, out int affected)
-        {
-            affected = 0;
-            SqlConnection conn = new SqlConnection(DBHelper.getCnnString("FoodTracker"));
-            conn.Open();
-            String comText = "SELECT m.MealName, m.Portion, n.Score, n.NoteText " +
-                "FROM Meals m LEFT JOIN Notes n ON m.NoteID=n.NoteID " +
-                "WHERE m.MealID=@MealID";
-            SqlCommand sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@MealID", MealID);
-            SqlDataReader reader = sql.ExecuteReader();
-            if (!reader.Read())     //If No meal is found Stop/do Nothing
-            {
-                conn.Close();
+            else
+            {   //if no food was found
+                affected = 0;
                 return null;
             }
 
+            DBHelper.conn.Close();
+        }
+        private static MealEntry SelectMealEntry(int MealID, out int affected)  //select MealEntry from DB based on MealID given
+        {   
+            affected = 0;
+
+            SqlParameter[] sparams = new SqlParameter[] { new SqlParameter("@MealID", MealID) };
+            DataRowCollection rows = DBHelper.selectStatement("SELECT m.MealName, m.Portion, n.Score, n.NoteText " +
+                "FROM Meals m LEFT JOIN Notes n ON m.NoteID=n.NoteID WHERE m.MealID=@MealID", sparams); //select Meal data for this Meal(based on ID) and its associated Note data
+            if (rows.Count == 0)     //If No meal is found Stop/do Nothing
+                return null;
+
+            //create MealEntry object and populate some of its data
             MealEntry meal = new MealEntry();
-            meal._name = reader["MealName"].ToString();
-            meal._portion = (double)reader["Portion"];
-            meal._note = new Note(reader["Score"] == DBNull.Value ? "" : reader["Score"].ToString(),
-                reader["NoteText"] == DBNull.Value ? "" : reader["NoteText"].ToString());
+            meal._name = rows[0]["MealName"].ToString();
+            meal._portion = (double)rows[0]["Portion"];
+            meal._note = new Note(rows[0]["Score"] == DBNull.Value ? "" : rows[0]["Score"].ToString(),
+                rows[0]["NoteText"] == DBNull.Value ? "" : rows[0]["NoteText"].ToString());
             affected++;
-            reader.Close();
-            sql.Dispose();
 
+            rows = DBHelper.selectStatement("SELECT f.FoodID, f.IsDish, f.FoodName, f.Brand, f.Fat, f.Carbs, f.Protein, f.SizeInfo, md.Amount " +
+                "FROM FoodItems f JOIN MealData md ON f.FoodID=md.FoodID WHERE md.MealID=@MealID;", sparams);   //select FoodItems associated with this MealID from MealData
+            foreach (DataRow row in rows)   //add the rows information as FoodEntry object to this newly made MealEntry
+            {   
+                if ((bool)row["IsDish"])    //if the food found is a Dish create a Dish and populate its data
+                {   
+                    Dish foodDish = new Dish(row["FoodName"].ToString(), row["Brand"].ToString(),
+                        (double)row["Fat"], (double)row["Carbs"], (double)row["Protein"],
+                        row["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces);
 
-            comText = "SELECT f.FoodName, f.Brand, f.Fat, f.Carbs, f.Protein, f.SizeInfo, md.Amount " +
-                "FROM FoodItems f JOIN MealData md ON f.FoodID=md.FoodID " +
-                "WHERE md.MealID=@MealID;";
-            sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@MealID", MealID);
-            reader = sql.ExecuteReader();
-            while (reader.Read())
-            {
-                meal.addFoodEntry(new FoodEntry(new FoodItem(reader["FoodName"].ToString(), reader["Brand"].ToString(),
-                    (double)reader["Fat"], (double)reader["Carbs"], (double)reader["Protein"],
-                    reader["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces), (double)reader["Amount"]));
+                    SqlParameter[] sparamsD = new SqlParameter[] { new SqlParameter("@DishID", row["FoodID"]) };
+                    DataRowCollection rowsD = DBHelper.selectStatement("SELECT f.FoodName, f.Brand, f.Fat, f.Carbs, f.Protein, f.SizeInfo, dd.Amount " +
+                        "FROM FoodItems f JOIN DishData dd ON f.FoodID=dd.IngredientID WHERE dd.DishID=@DishID;", sparamsD);   //select FoodItems associated with this FoodIF(DishID in DishData) from DishData
+                    foreach (DataRow rowD in rowsD)     //add the rows information as FoodEntry object to this newly made Dish
+                    {                        
+                        foodDish.addFoodEntry(new FoodEntry(new FoodItem(rowD["FoodName"].ToString(), rowD["Brand"].ToString(),
+                            (double)rowD["Fat"], (double)rowD["Carbs"], (double)rowD["Protein"],
+                            rowD["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces), (double)rowD["Amount"]));
+                        affected++;
+                    }
+                    meal.addFoodEntry(new FoodEntry(foodDish, (double)row["Amount"]));
+                }
+                else
+                {   //if the food found is not a Dish create a basic FoodItem
+                    FoodItem food= new FoodItem(row["FoodName"].ToString(), row["Brand"].ToString(),
+                        (double)row["Fat"], (double)row["Carbs"], (double)row["Protein"],
+                        row["SizeInfo"] == DBNull.Value ? Measure.Grams : Measure.Pieces);
+                    meal.addFoodEntry(new FoodEntry(food, (double)row["Amount"]));
+                }
                 affected++;
             }
-            reader.Close();
-            sql.Dispose();
-            conn.Close();
 
-            meal.checkAndCorrect();
+            meal.setCalculatedValues(); //calculate the final food values
             return meal;
         }
-        public static DayEntry SelectDayEntry(DateTime date, out int affected)
-        {
+        private static DayEntry SelectDayEntry(DateTime date, out int affected) //selects one DayEntry from DB based on Date given
+        {   
             affected = 0;
-            SqlConnection conn = new SqlConnection(DBHelper.getCnnString("FoodTracker"));
-            conn.Open();
 
-            String comText = "SELECT m.MealID FROM Meals m WHERE m.TimeEaten=@DayDate;";
-            SqlCommand sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@DayDate", date.ToString("yyyy/MM/dd"));
-            SqlDataReader reader = sql.ExecuteReader();
-            if (!reader.HasRows)    //If No day(meal entries for the Date) is found Stop/do Nothing
-            {
-                conn.Close();
+            SqlParameter[] sparams = new SqlParameter[] { new SqlParameter("@DayDate", date.ToString("yyyy/MM/dd")) };
+            DataRowCollection rows = DBHelper.selectStatement("SELECT m.MealID FROM Meals m WHERE m.TimeEaten=@DayDate;", sparams); //selects Meals based on DayEaten
+            if (rows.Count==0)    //If No day(meal entries for the Date) is found Stop/do Nothing
                 return null;
-            }
 
             DayEntry day = new DayEntry();
-            int affmeal;
             day._date = date;
-            while (reader.Read())
+            int affmeal;
+            foreach(DataRow row in rows)    //adds Meals data into MealEntries for this newly made DayEntry
             {
-                day.addMealEntry(SelectMealEntry(((int)reader["MealID"]), out affmeal));
+                day.addMealEntry(SelectMealEntry(((int)row["MealID"]), out affmeal));
                 affected += affmeal;
             }
-            reader.Close();
-            sql.Dispose();
 
-            comText = "SELECT n.Score, n.NoteTExt FROM Notes n WHERE n.OfDay=@DayDate;";
-            sql = new SqlCommand(comText, conn);
-            sql.Parameters.AddWithValue("@DayDate", date.ToString("yyyy/MM/dd"));
-            reader = sql.ExecuteReader();
-            if (reader.Read())
-            {
-                day._note = new Note(reader["Score"] == DBNull.Value ? "" : reader["Score"].ToString(),
-                    reader["NoteText"] == DBNull.Value ? "" : reader["NoteText"].ToString());
+            rows = DBHelper.selectStatement("SELECT n.Score, n.NoteTExt FROM Notes n WHERE n.OfDay=@DayDate;", sparams);    //selects Note data for this day from Notes
+            if (rows.Count==1)      //creates Note for this DayEntry is data was found
+            {   
+                day._note = new Note(rows[0]["Score"] == DBNull.Value ? "" : rows[0]["Score"].ToString(),
+                    rows[0]["NoteText"] == DBNull.Value ? "" : rows[0]["NoteText"].ToString());
                 affected++;
             }
-            reader.Close();
-            sql.Dispose();
-            conn.Close();
 
-            day.checkAndCorrect();
+            day.setCalculatedValues();  //calculate the final food values
             return day;
         }
-        public static List<DayEntry> SelectDayEntries(DateTime start, DateTime end, out int affected)
-        {
+        public static List<DayEntry> SelectDayEntries(DateTime start, DateTime end, out int affected)   //selects multiple DayEntries from DB between 2 given dates
+        {   
+            DBHelper.conn.Open();
+
             affected = 0;
-            List<DayEntry> dayList = new List<DayEntry>();
+            List<DayEntry> dayList = new List<DayEntry>();  //list with DayEntries loaded
             DayEntry day = null;
-            DateTime current = start;
+            DateTime current = start;       //current date to check as going through the range
             while (current < end)
             {
                 day = SelectDayEntry(current, out int affDay);
-                if (day != null)
+                if (day != null)            //if no entries were found with the current date
                     dayList.Add(day);
                 affected += affDay;
                 current = current.AddDays(1);
             }
+
+            DBHelper.conn.Close();
             return dayList;
         }
-        public static int SelectIntoDaysAll()
-        {
-            MainForm.Days = SelectDayEntries(new DateTime(2019, 1, 1), DateTime.Now, out int affected);
+        public static int SelectDayEntriesAll()     //selects ALL found data for Days from DB and populates/replaces the entire Days list with DayEntry objects
+        {   
+            MainForm.Days = SelectDayEntries(new DateTime(2019, 1, 1), DateTime.Now, out int affected);     //uses the previous method with range: 01/01/2019-Present
             return affected;
         }
+        #endregion
     }
 }

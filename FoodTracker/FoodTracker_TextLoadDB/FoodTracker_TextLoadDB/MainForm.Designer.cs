@@ -45,6 +45,7 @@
             this.button_writeFile = new System.Windows.Forms.Button();
             this.button_addDay = new System.Windows.Forms.Button();
             this.button_WTF = new System.Windows.Forms.Button();
+            this.button_periodFromDB = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_findFile
@@ -76,36 +77,35 @@
             this.textBox_filepath.Name = "textBox_filepath";
             this.textBox_filepath.Size = new System.Drawing.Size(399, 20);
             this.textBox_filepath.TabIndex = 2;
-            this.textBox_filepath.Text = "..\\..\\NUTcalc.text";
+            this.textBox_filepath.Text = "..\\..\\NUTCalc.text";
             // 
             // openFileDialog_dbtextfile
             // 
             this.openFileDialog_dbtextfile.DefaultExt = "rtf";
-            this.openFileDialog_dbtextfile.FileName = "..\\..\\NUTcalc.text";
-            this.openFileDialog_dbtextfile.InitialDirectory = "..\\..";
+            this.openFileDialog_dbtextfile.InitialDirectory = "F:\\SvProduction\\FoodTracker\\FoodTracker_TextLoadDB\\FoodTracker_TextLoadDB";
             // 
             // button_intoDB
             // 
             this.button_intoDB.Enabled = false;
-            this.button_intoDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_intoDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_intoDB.ForeColor = System.Drawing.Color.Maroon;
-            this.button_intoDB.Location = new System.Drawing.Point(316, 72);
+            this.button_intoDB.Location = new System.Drawing.Point(318, 72);
             this.button_intoDB.Name = "button_intoDB";
-            this.button_intoDB.Size = new System.Drawing.Size(141, 30);
+            this.button_intoDB.Size = new System.Drawing.Size(167, 30);
             this.button_intoDB.TabIndex = 3;
-            this.button_intoDB.Text = "LOAD INTO DB";
+            this.button_intoDB.Text = "LOAD ALL INTO DB";
             this.button_intoDB.UseVisualStyleBackColor = true;
             this.button_intoDB.Click += new System.EventHandler(this.button_LoadIntoDB_Click);
             // 
             // button_fromDB
             // 
-            this.button_fromDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_fromDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_fromDB.ForeColor = System.Drawing.Color.Maroon;
-            this.button_fromDB.Location = new System.Drawing.Point(463, 72);
+            this.button_fromDB.Location = new System.Drawing.Point(491, 72);
             this.button_fromDB.Name = "button_fromDB";
-            this.button_fromDB.Size = new System.Drawing.Size(159, 30);
+            this.button_fromDB.Size = new System.Drawing.Size(156, 30);
             this.button_fromDB.TabIndex = 4;
-            this.button_fromDB.Text = "GET FROM DB";
+            this.button_fromDB.Text = "GET ALL FROM DB";
             this.button_fromDB.UseVisualStyleBackColor = true;
             this.button_fromDB.Click += new System.EventHandler(this.button_GetFromDB_Click);
             // 
@@ -122,7 +122,7 @@
             // button_clear
             // 
             this.button_clear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_clear.Location = new System.Drawing.Point(653, 98);
+            this.button_clear.Location = new System.Drawing.Point(660, 105);
             this.button_clear.Name = "button_clear";
             this.button_clear.Size = new System.Drawing.Size(75, 23);
             this.button_clear.TabIndex = 7;
@@ -215,7 +215,7 @@
             this.button_addDay.Name = "button_addDay";
             this.button_addDay.Size = new System.Drawing.Size(136, 49);
             this.button_addDay.TabIndex = 17;
-            this.button_addDay.Text = "Add Day Entry";
+            this.button_addDay.Text = "See/Add Day Entry";
             this.button_addDay.UseVisualStyleBackColor = true;
             this.button_addDay.Click += new System.EventHandler(this.button_addDay_Click);
             // 
@@ -229,11 +229,24 @@
             this.button_WTF.UseVisualStyleBackColor = true;
             this.button_WTF.Click += new System.EventHandler(this.button_WTF_Click);
             // 
-            // Form1
+            // button_periodFromDB
+            // 
+            this.button_periodFromDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_periodFromDB.ForeColor = System.Drawing.Color.Maroon;
+            this.button_periodFromDB.Location = new System.Drawing.Point(16, 833);
+            this.button_periodFromDB.Name = "button_periodFromDB";
+            this.button_periodFromDB.Size = new System.Drawing.Size(136, 47);
+            this.button_periodFromDB.TabIndex = 46;
+            this.button_periodFromDB.Text = "GET PERIOD From DB";
+            this.button_periodFromDB.UseVisualStyleBackColor = true;
+            this.button_periodFromDB.Click += new System.EventHandler(this.buttonPeriodFromDB_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(747, 892);
+            this.Controls.Add(this.button_periodFromDB);
             this.Controls.Add(this.button_WTF);
             this.Controls.Add(this.button_addDay);
             this.Controls.Add(this.button_writeFile);
@@ -252,7 +265,7 @@
             this.Controls.Add(this.button_findFile);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SvFoodTracker_TextLoadDB";
             this.ResumeLayout(false);
@@ -279,6 +292,7 @@
         private System.Windows.Forms.Button button_writeFile;
         private System.Windows.Forms.Button button_addDay;
         private System.Windows.Forms.Button button_WTF;
+        private System.Windows.Forms.Button button_periodFromDB;
     }
 }
 

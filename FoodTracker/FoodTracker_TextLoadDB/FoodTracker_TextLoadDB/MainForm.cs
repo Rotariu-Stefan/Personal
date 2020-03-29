@@ -14,9 +14,10 @@ using System.Data.SqlClient;
 
 namespace FoodTracker_TextLoadDB
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form    //the Main Windows Form that shows up upon executing the program
     {
         #region Fields
+        //various constant regexes used to match and manipulated text data when init or processing text files with groups for identifying specific values
         public static readonly Regex regexEntry = new Regex(
             @"(?<Amount>^\d+([\./]{1}\d+)?(g\b|ml\b|\b)) (?<Name>[^@]+) (@(?<Brand>.+) )?(?<Macros>[\d\.]{1,4}/[\d\.]{1,4}/[\d\.]{1,4}$)");
         public static readonly Regex regexEntryResult = new Regex(
@@ -31,22 +32,25 @@ namespace FoodTracker_TextLoadDB
             @"^\-{3,}$");
         public static readonly Regex regexNumberValue = new Regex(
             @"^\d+([\./]{1}\d+)?$");
+        public static readonly Regex regexDishResult = new Regex(
+            @"^\>===(?<Amount>\d+(g\b|ml\b|\b)) (?<Name>[^@]+) (@(?<Brand>.+) )?(?<Macros>[\d\.]{1,4}/[\d\.]{1,4}/[\d\.]{1,4}$)");
 
-        public static List<FoodItem> Foods;
-        public static List<DayEntry> Days;
+        public static List<FoodItem> Foods;     //global list of all Food Items(dishes included) found in current program state
+        public static List<DayEntry> Days;      //global list of all Day Entries found in current program state
         #endregion
 
         #region Constructor
-        public MainForm()
+        public MainForm()   //init list and components
         {
             InitializeComponent();
             Foods = new List<FoodItem>();
             Days = new List<DayEntry>();
+            DBCommands.loadDefaults();  //load default DB values for DBHelper use
         }
         #endregion
 
         #region Extra private stuff
-        private String prepLine(String rawLine)
+        private String prepLine(String rawLine)     //function used to get rid of Word format stuff
         {
             String line = rawLine;
             line = line.Replace(@"\par", "");
@@ -59,7 +63,7 @@ namespace FoodTracker_TextLoadDB
             line = line.Trim();
             return line;
         }
-        private bool testFoodDupMacro(FoodItem newf, ref FoodItem dbf)
+        private bool testFoodDupMacro(FoodItem newf, ref FoodItem dbf)  //function used to compare macro values of foods with same name
         {
             foreach (FoodItem f in Foods)
                 if (newf == f)
@@ -72,25 +76,28 @@ namespace FoodTracker_TextLoadDB
                         return false;
             return false;
         }
-        private IEnumerable<DateTime> getDays()
+        private IEnumerable<DateTime> getDays() //gets collection of dates inbetween selected calendar dates
         {
             for (DateTime date = calendar.SelectionStart; date <= calendar.SelectionEnd; date = date.AddDays(1))
                 yield return date;
         }
         #endregion
 
-        #region Button Presses
-        private void button_findFile_Click(object sender, EventArgs e)
+        #region Button Presses - UI&File
+        private void button_findFile_Click(object sender, EventArgs e)      //opens file dialog to search for text files
         {
             openFileDialog_dbtextfile.ShowDialog();
             textBox_filepath.Text = openFileDialog_dbtextfile.FileName;
         }
-        private void button_writeFile_Click(object sender, EventArgs e)
+        private void button_writeFile_Click(object sender, EventArgs e)     //open&Write the current program state data into a text file(with textBox_filepath filename)
         {
             output.AppendText($"Writing to file: {textBox_filepath.Text} ...");
             Stopwatch timer = Stopwatch.StartNew();
 
             StreamWriter writer = new StreamWriter(textBox_filepath.Text);
+            foreach (FoodItem food in Foods)
+                if(food is Dish)
+                    writer.Write((food as Dish).ToStringFull() + "\n\n");
             foreach (DayEntry day in Days)
                 writer.Write(day + "\n\n");
             writer.WriteLine("LOOOOOOOOOOOL!!!");
@@ -99,76 +106,83 @@ namespace FoodTracker_TextLoadDB
             timer.Stop();
             output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
         }
-        private void button_processFile_Click(object sender, EventArgs e)
+        private void button_processFile_Click(object sender, EventArgs e)   //open&Read a text file line by line, matchs regex and loads all present info into program state
         {
             StreamReader reader = new StreamReader(textBox_filepath.Text);
             output.AppendText($"Processing file: {textBox_filepath.Text} ...");
             output.Update();
 
-            Days = new List<DayEntry>();
+            Days = new List<DayEntry>();        //reinit to get rid of old state
             Foods = new List<FoodItem>();
 
-            Stopwatch timer = Stopwatch.StartNew();
+            Stopwatch timer = Stopwatch.StartNew(); //test performance
 
-            String line;
-            Match m;
+            String line;        //current line
+            Match m;            //current regex match for line
 
-            List<FoodEntry> lfe = new List<FoodEntry>();
-            List<MealEntry> lme = new List<MealEntry>();
-            FoodEntry fe = null;
-            String activ = "";
+            List<FoodEntry> lfe = new List<FoodEntry>();    //list of Food entries to be init for next MealEntry
+            List<MealEntry> lme = new List<MealEntry>();    //list of Meal entries to be init for next DatEntry
+            FoodEntry fe = null;                            //current FoodEntry found
+            String activ = "";                              //helps set activity for current DayEntry
 
-            while ((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()) != null)      //go through all lines in text file
             {
                 //line = prepLine(line);
 
-                if ((m = regexEntry.Match(line)).Success)
+                if ((m = regexEntry.Match(line)).Success)   //matches (1st line)of a Food Entry format: 11g name brand 11/11/11
                 {
                     fe = new FoodEntry(m);
                     lfe.Add(fe);
                     if (!Foods.Contains(fe._food))
                         Foods.Add(fe._food);
 
-                    //richTextBox_output.AppendText(line + " <----- ENTRY\n");
+                    //output.AppendText(line + " <----- ENTRY\n");
                 }
-                else if ((m = regexEntryResult.Match(line)).Success)
+                else if ((m = regexEntryResult.Match(line)).Success)    //matches (2nd line)result macro values of a Food Entry format: =11/11/11
                 {
                     fe.setEntryMacros(m.Groups["Macros"].Value);
 
-                    //richTextBox_output.AppendText(line + " <----- ERESULT\n");
+                    //output.AppendText(line + " <----- ERESULT\n");
                 }
-                else if ((m = regexMealResult.Match(line)).Success)
+                else if ((m = regexMealResult.Match(line)).Success)     //matches MealEntry values after the Food list format: ===1==111//11//11 +-(desc)
                 {
                     lme.Add(new MealEntry(lfe, m));
                     lfe = new List<FoodEntry>();
 
-                    //richTextBox_output.AppendText(line + " <----- MEAL\n");
+                    //output.AppendText(line + " <----- MEAL\n");
                 }
-                else if ((m = regexDayResult.Match(line)).Success)
+                else if ((m = regexDayResult.Match(line)).Success)      //matches DayEntry values after the Meal list format: 22/11/2020--->111||111||111 +-(desc)
                 {
                     Days.Add(new DayEntry(lme, m));
                     Days[Days.Count - 1].setActiv(activ);
                     lme = new List<MealEntry>();
                     activ = "";
 
-                    //richTextBox_output.AppendText(line + " <----- DAY\n");
+                    //output.AppendText(line + " <----- DAY\n");
                 }
-                else if ((m = regexDayActiv.Match(line)).Success)
+                else if ((m = regexDayActiv.Match(line)).Success)       //matches activity for current format: +SALA or +EXS
                 {
                     activ = m.Groups["Activ"].Value;
 
-                    //richTextBox_output.AppendText(line + " <----- ACTIV\n");
+                    //output.AppendText(line + " <----- ACTIV\n");
+                }
+                else if ((m = regexDishResult.Match(line)).Success)        //matches Dish definition values after the food list format: >===1 Pizza @eu 11/11/11
+                {
+                    Foods.Add(new Dish(lfe, m));
+                    lfe = new List<FoodEntry>();
+
+                    //output.AppendText(line + " <----- DISH\n");
                 }
             }
             reader.Close();
 
-            Foods.Sort((x, y) => (x._name + x._brand).CompareTo(y._name + y._brand));
+            Foods.Sort((x, y) => (x._name + x._brand).CompareTo(y._name + y._brand));       //sorts the Foods list alphabetically by Name and Brand
 
             timer.Stop();
-            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
-            button_intoDB.Enabled = true;
+            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");   //prints time required to do to output
+            button_intoDB.Enabled = true;                           //enables loading data to Database
         }
-        private void button_seeMealsDay_Click(object sender, EventArgs e)
+        private void button_seeMealsDay_Click(object sender, EventArgs e)   //print to output the meals in days from selected calendar range
         {
             output.AppendText($"\nDay Entries for selected period {calendar.SelectionStart.ToString("dd/MM/yyyy")} " +
                 $"- {calendar.SelectionEnd.ToString("dd/MM/yyyy")} :\n\n");
@@ -182,48 +196,89 @@ namespace FoodTracker_TextLoadDB
                     break;
             }
         }
-        private void button_addDay_Click(object sender, EventArgs e)
+        private void button_addDay_Click(object sender, EventArgs e)        //opens the add/see day form
         {
             AddDayForm addF = new AddDayForm(calendar.SelectionStart);
             addF.ShowDialog();
         }
-        private void button_searchFood_Click(object sender, EventArgs e)
+        private void button_searchFood_Click(object sender, EventArgs e)    //searches food item in Foods list to match search term from searchFood textbox - not case sensitive
         {
             output.AppendText("\nFood Items matching Search:\n");
             foreach (FoodItem food in Foods)
-                if (food._name.Contains(textBox_searchFood.Text) || food._brand.Contains(textBox_searchFood.Text))
-                    output.AppendText(food.ToStringNice() + "\n\n");
+                if (food._name.ToLower().Contains(textBox_searchFood.Text.ToLower()) || food._brand.ToLower().Contains(textBox_searchFood.Text.ToLower()))
+                    output.AppendText(food is Dish ? (food as Dish).ToStringListed() : food.ToStringNice() + "\n\n");
         }
-        private void button_seeAllFoodItems_Click(object sender, EventArgs e)
+        private void button_seeAllFoodItems_Click(object sender, EventArgs e)   //prints all items in Foods list to output
         {
             output.AppendText("\nAll Currect Food Items:\n\n");
             foreach (FoodItem food in Foods)
-                output.AppendText(food.ToStringNice() + "\n\n");
+                output.AppendText(food is Dish ? (food as Dish).ToStringListed(): food.ToStringNice() + "\n\n");
         }
-        private void button_clear_Click(object sender, EventArgs e)
+        private void button_clear_Click(object sender, EventArgs e)     //clears output of text
         {
             output.Clear();
         }
         #endregion
 
+        #region Button Presses - DB stuff
+        private void button_LoadIntoDB_Click(object sender, EventArgs e)    //loads all the currect program state data(Foods and Days) into Database
+        {
+            output.AppendText($"Inserting Foods and Day Entries into DataBase...\n");
+            output.Update();
+            Stopwatch timer = Stopwatch.StartNew();
+
+            output.AppendText("\nInsert FoodItems Affected:" + DBCommands.InsertFoodItems(Foods));  //prints to output all DB rows affected/called relating to Foods
+            output.AppendText("\nInsert Days Affected: " + DBCommands.InsertDays(Days));            //prints to output all DB rows affected/called relating to Days
+
+            timer.Stop();
+            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
+        }
+        private void button_GetFromDB_Click(object sender, EventArgs e)     //loads from Database all data into program state data(Foods and Days)
+        {
+            output.AppendText($"Loading Entries from DataBase...");
+            output.Update();
+            Stopwatch timer = Stopwatch.StartNew();
+
+            Foods = new List<FoodItem>();
+            Days = new List<DayEntry>();
+
+            output.AppendText($"Meal Entry Affected:{DBCommands.SelectDayEntriesAll()}\n");     //prints to output all DB rows affected/called
+
+            timer.Stop();
+            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
+            button_intoDB.Enabled = true;                           //enables loading data to Database
+        }
+        private void buttonPeriodFromDB_Click(object sender, EventArgs e)   //loads from Database data program state data(Foods and Days) from selected calendar range
+        {
+            output.AppendText($"TESTING...\n");
+            Stopwatch timer = Stopwatch.StartNew();
+
+            Days = DBCommands.SelectDayEntries(calendar.SelectionStart, calendar.SelectionEnd, out int x);
+            output.AppendText($"Meal Entry Affected:{x}\n");
+
+            timer.Stop();
+            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
+        }
+        #endregion
+
         #region Global operations
-        public static void insertOrRefFood(ref FoodItem food)  //inserts food into Foods if it's New Or references item in Foods if it Already Exists
+        public static void insertOrRefFood(ref FoodItem food)  //inserts in ordered way food into Foods if it's New Or references item in Foods if it Already Exists
         {
             if (food != null)
             {
-                if (Foods.Count == 0 || food > Foods.Last())
+                if (Foods.Count == 0 || food > Foods.Last())    //if food is bigger(alphabetically) to last Item in Foods
                     Foods.Add(food);
                 else
                 {
                     for (int i = 0; i < Foods.Count; i++)
                     {
-                        if (Foods[i] < food) continue;
-                        if (Foods[i] == food)
+                        if (Foods[i] < food) continue;          //keep searching to find index while food is smaller than current index
+                        if (Foods[i] == food)                   //if the Same food is found in list references food given to the one in the list
                         {
                             food = Foods[i];
                             break;
                         }
-                        if (Foods[i] > food)
+                        if (Foods[i] > food)                    //if food passed the index where it would have to be(but isn't), it inserts it there
                         {
                             Foods.Insert(i, food);
                             break;
@@ -234,24 +289,23 @@ namespace FoodTracker_TextLoadDB
             else
                 MessageBox.Show("Will not accept Null Food Item!");
         }
-        public static void checkAndCorrectALL()
+        public static void setCalculatedValuesAll()         //calls setCalculatedValues() for ALL types of Entries(Food, Meal, Day) - essentially correct any user calculation mistakes
         {
             foreach (DayEntry de in Days)
             {
                 foreach (MealEntry me in de._mealEntries)
                 {
                     foreach (FoodEntry fe in me._foodEntries)
-                        fe.checkAndCorrect();
-                    me.checkAndCorrect();
+                        fe.setCalculatedValues();
+                    me.setCalculatedValues();
                 }
-                de.checkAndCorrect();
+                de.setCalculatedValues();
             }
         }
         #endregion
 
-
         #region Tests
-        private void button_processFile_Click_TESTIndex(object sender, EventArgs e)
+        private void button_processFile_Click_TESTIndex(object sender, EventArgs e)         //old function testing processing performace by trying an index method
         {
             Days = new List<DayEntry>();
             Foods = new List<FoodItem>();
@@ -320,7 +374,7 @@ namespace FoodTracker_TextLoadDB
             timer.Stop();
             output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
         }
-        private void button_processFile_Click_TESTLast(object sender, EventArgs e)
+        private void button_processFile_Click_TESTLast(object sender, EventArgs e)          //old function testing processing performace by trying a Last() method
         {
             Days = new List<DayEntry>();
             Foods = new List<FoodItem>();
@@ -384,41 +438,11 @@ namespace FoodTracker_TextLoadDB
         }
         #endregion
 
-        private void button_WTF_Click(object sender, EventArgs e)
+        private void button_WTF_Click(object sender, EventArgs e)       //testing whatever stuff comes to mind
         {
             output.AppendText($"TESTING...\n");
             Stopwatch timer = Stopwatch.StartNew();
-            
-            Days=DBCommands.SelectDayEntries(calendar.SelectionStart, calendar.SelectionEnd, out int x);
-            output.AppendText($"Meal Entry Affected:{x}\n");
 
-            timer.Stop();
-            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
-        }
-
-        private void button_LoadIntoDB_Click(object sender, EventArgs e)
-        {
-            output.AppendText($"Inserting Foods and Day Entries into DataBase...\n");
-            output.Update();
-            Stopwatch timer = Stopwatch.StartNew();
-
-            output.AppendText("\nInsert FoodItems Affected:" + DBCommands.InsertFoodItems(Foods));
-            output.AppendText("\nInsert Days Affected: " + DBCommands.InsertDays(Days));
-
-            timer.Stop();
-            output.AppendText($"\n...DONE! ({timer.Elapsed})\n");
-        }
-
-        private void button_GetFromDB_Click(object sender, EventArgs e)
-        {
-            output.AppendText($"Loading Entries from DataBase...");
-            output.Update();
-            Stopwatch timer = Stopwatch.StartNew();
-
-            Foods = new List<FoodItem>();
-            Days = new List<DayEntry>();
-
-            output.AppendText($"Meal Entry Affected:{DBCommands.SelectIntoDaysAll()}\n");
 
             timer.Stop();
             output.AppendText($"\n...DONE! ({timer.Elapsed})\n");

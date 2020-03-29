@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp1
+namespace Probability
 {
     public abstract class EventRunner
     {
+        #region Fields
         public const int defaultTries = 100000;
         protected const int defaultAvg = 1;
 
@@ -42,9 +43,9 @@ namespace WindowsFormsApp1
                 return getName();
             }
         }
+        #endregion
 
-        public abstract string getName();
-
+        #region Run methods -forInherit
         public abstract void runEvents();
         public abstract bool checkSetMethods();
         public void setRepeatResults()
@@ -58,17 +59,43 @@ namespace WindowsFormsApp1
                 else _results.Add(Event.FAIL);
             }
         }
+        #endregion
 
-        public abstract float getChance(int triesNr);
+        #region Info gets -forInherit
+        public float getChance(int triesNr)
+        {
+            float sCount, fCount, chance = 0;
+
+            for (int i_av = 0; i_av < defaultAvg; i_av++)
+            {
+                sCount = 0; fCount = 0;
+                for (int i_tr = 0; i_tr < triesNr; i_tr++)
+                {
+                    runEvents();
+
+                    if (checkSetMethods()) sCount++;
+                    else fCount++;
+                }
+                if (fCount == 0) chance += 100;
+                else chance += (sCount / (fCount + sCount)) * 100;
+            }
+            return chance / defaultAvg;
+        }
         public float getChance()
         {
             return getChance(defaultTries);
         }
 
-        public abstract string getMessage(int triesNr);
+        public string getMessage(int triesNr)
+        {
+            return "The Chance of Succes for " + getName() + " is: " + getChance(triesNr) + "% !";
+        }
         public string getMessage()
         {
             return getMessage(defaultTries);
         }
+
+        public abstract string getName();
+        #endregion
     }
 }

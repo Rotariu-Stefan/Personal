@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp1
+namespace Probability
 {
     public class SimpleEvRunner : EventRunner
     {
+        #region Fields
         private Event _ev;
         public Event Ev
         {
@@ -35,7 +36,9 @@ namespace WindowsFormsApp1
                 _checkParam = value;
             }
         }
+        #endregion
 
+        #region Constructors
         public SimpleEvRunner(Event ev)
         {
             Ev = ev;
@@ -49,43 +52,26 @@ namespace WindowsFormsApp1
         {
             Repeat = repeat;
         }
+        #endregion
 
-        public override void runEvents()
-        {
-            _ev.happen();
-        }
+        #region Run methods implementation
         public bool checkSIMPLE(int isSuccess)
         {
             if (isSuccess < 0) throw new Exception("No Negative Probabilities !");
             if (isSuccess > 0) return _ev.ResultState;
             else return !_ev.ResultState;
         }
-
         public override bool checkSetMethods()
         {
             return checkSIMPLE(_checkParam);
         }
-
-        public override float getChance(int triesNr)
+        public override void runEvents()
         {
-            float sCount, fCount, chance = 0;
-
-            for (int i_av = 0; i_av < defaultAvg; i_av++)
-            {
-                sCount = 0; fCount = 0;
-                for (int i_tr = 0; i_tr < triesNr; i_tr++)
-                {
-                    runEvents();
-
-                    if (checkSetMethods()) sCount++;
-                    else fCount++;
-                }
-                if (fCount == 0) chance += 100;
-                else chance += (sCount / (fCount + sCount)) * 100;
-            }
-            return chance / defaultAvg;
+            _ev.happen();
         }
+        #endregion
 
+        #region Info Gets implementation
         public override string getName()
         {
             if (_name == Event.keywords[0])
@@ -96,9 +82,6 @@ namespace WindowsFormsApp1
             else
                 return _name;
         }
-        public override string getMessage(int triesNr)
-        {
-            return "The Chance of Succes for " + getName() + " is: " + getChance(triesNr) + "% !";
-        }
+        #endregion
     }
 }

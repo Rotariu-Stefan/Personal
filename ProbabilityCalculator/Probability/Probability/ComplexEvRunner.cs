@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp1
+namespace Probability
 {
+    public delegate bool CheckMethods(int checkParam);
     public class ComplexEvRunner : EventRunner
     {
+        #region Fields
         //public static readonly string[] _checks = { "And", "Or", "SMin", "FMin", "SMax", "FMax" };
-        public delegate bool CheckMethods(int checkParam);
-
         private List<EventRunner> _evRunnerList;
         public List<EventRunner> EvRunnerList { get => _evRunnerList; }
 
@@ -19,7 +19,9 @@ namespace WindowsFormsApp1
 
         private List<int> _checkParams;
         public List<int> CheckParamsList { get => _checkParams; }
+        #endregion
 
+        #region Constructors
         public ComplexEvRunner(Event ev)
         {
             _evRunnerList = new List<EventRunner> { new SimpleEvRunner(ev) };
@@ -58,7 +60,9 @@ namespace WindowsFormsApp1
         {
             Repeat = repeat;
         }
+        #endregion
 
+        #region Add/Remove Checks and Events
         public void setChecks(CheckMethods checkMethods, List<int> checkParams)
         {
             if (checkParams.Count != checkMethods.GetInvocationList().Length)
@@ -113,13 +117,9 @@ namespace WindowsFormsApp1
         {
             _evRunnerList.Remove(evRun);
         }
+        #endregion
 
-        public override void runEvents()
-        {
-            for (int i = 0; i < _evRunnerList.Count(); i++)
-                _evRunnerList[i].setRepeatResults();
-        }
-
+        #region Run Methods Implementation
         public bool checkAND(int isSuccess)
         {
             if (isSuccess < 0) throw new Exception("No Negative Probabilities !");
@@ -160,7 +160,6 @@ namespace WindowsFormsApp1
                 return Event.FAIL;
             }
         }
-
         public bool checkSMIN(int sMin)
         {
             if (sMin < 0) throw new Exception("No Negative Probabilities !");
@@ -191,7 +190,6 @@ namespace WindowsFormsApp1
                         if (++fCount == fMin) return Event.SUCCESS;
             return Event.FAIL;
         }
-
         public bool checkSMAX(int sMax)
         {
             return checkFMIN(_evRunnerList.Count() - sMax);
@@ -211,27 +209,14 @@ namespace WindowsFormsApp1
                     return Event.FAIL;
             return Event.SUCCESS;
         }
-
-        public override float getChance(int triesNr)
+        public override void runEvents()
         {
-            float sCount, fCount, chance = 0;
-
-            for (int i_av = 0; i_av < defaultAvg; i_av++)
-            {
-                sCount = 0; fCount = 0;
-                for (int i_tr = 0; i_tr < triesNr; i_tr++)
-                {
-                    runEvents();
-
-                    if (checkSetMethods()) sCount++;
-                    else fCount++;
-                }
-                if (fCount == 0) chance += 100;
-                else chance += (sCount / (fCount + sCount)) * 100;
-            }
-            return chance / defaultAvg;
+            for (int i = 0; i < _evRunnerList.Count(); i++)
+                _evRunnerList[i].setRepeatResults();
         }
+        #endregion
 
+        #region Info Gets Implementation
         public override string getName()
         {
             if (_name == Event.keywords[0])
@@ -260,9 +245,6 @@ namespace WindowsFormsApp1
             }
             else return _name;
         }
-        public override string getMessage(int triesNr)
-        {
-            return "The Chance of Succes for " + getName() + " is: " + getChance(triesNr) + "% !";
-        }
+        #endregion
     }
 }

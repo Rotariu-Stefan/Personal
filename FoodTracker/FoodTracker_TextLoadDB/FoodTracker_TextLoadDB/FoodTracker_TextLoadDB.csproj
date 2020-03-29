@@ -55,6 +55,7 @@
     <Compile Include="DBFunctions\DBCommands.cs" />
     <Compile Include="DBFunctions\DBHelper.cs" />
     <Compile Include="FileClasses\DayEntry.cs" />
+    <Compile Include="FileClasses\Dish.cs" />
     <Compile Include="FileClasses\FoodEntry.cs" />
     <Compile Include="FileClasses\FoodItem.cs" />
     <Compile Include="FileClasses\MealEntry.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp1
+namespace Probability
 {
     static class Program
     {
@@ -19,8 +19,8 @@ namespace WindowsFormsApp1
 
             ComplexEvRunner evr1 = new ComplexEvRunner(new List<Event>(){
                 new Event(1, 2), new Event(1, 3), new Event(1, 3), new Event("NamedDice", 1, 2) });
-            ComplexEvRunner.CheckMethods cm = new ComplexEvRunner.CheckMethods(evr1.checkSMIN);
-            cm += new ComplexEvRunner.CheckMethods(evr1.checkFMIN);
+            CheckMethods cm = new CheckMethods(evr1.checkSMIN);
+            cm += new CheckMethods(evr1.checkFMIN);
             evr1.setChecks(cm, new List<int> { 2, 1 });
             evr1.Name = "Bollocks!";
 

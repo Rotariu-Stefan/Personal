@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp1
+namespace Probability
 {
     public class Event //38px padding for ComplexEvent panel
     {
+        #region Fields
         public static readonly Random rng = new Random();
         public static readonly string[] keywords = { "Undefined", "Success", "Fail", "Half" };
         public const bool SUCCESS = true;
@@ -66,7 +67,9 @@ namespace WindowsFormsApp1
                 return _resultState;
             }
         }
+        #endregion
 
+        #region Constructors
         public Event()
         {
             _name = keywords[3];
@@ -110,9 +113,12 @@ namespace WindowsFormsApp1
         {
             Name = name;
         }
+        #endregion
 
+        #region Sets
         public void setValues(int fav, int pos)
         {
+            if (fav < 0 || pos < 0) throw new Exception("No Negative Probabilities!");
             if (fav > pos) throw new Exception("Favorable outcomes(" + fav + ") Cannot exceed Possible outcomes(" + pos + ") !");
             _possibleNr = pos;
             _favorNr = fav;
@@ -135,6 +141,7 @@ namespace WindowsFormsApp1
             else _possibleNr = 100;
             _favorNr = (int)(temp);
         }
+        #endregion
 
         public void happen()
         {

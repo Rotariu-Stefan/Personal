@@ -10,30 +10,38 @@ using System.Windows.Forms;
 
 namespace FoodTracker_TextLoadDB
 {
-    public partial class tbpaste : TextBox
+    public partial class tbpaste : TextBox      //custom textbox with flags and checks for paste events and dot types
     {
-        private const int WM_PASTE = 0x0302;
-        public bool dot
+        #region Fields
+        private const int WM_PASTE = 0x0302;    //code for paste event
+        public bool dot                         //true if a dot was typed recently
         { get; set; }
-        public bool pasted
+        public bool pasted                      //true if a paste event happened recently
         { get; set; }
-        public tbpaste()
+        #endregion
+
+        #region init
+        public tbpaste()    //init state
         {
             InitializeComponent();
             pasted = false;
             dot = false;
         }
-        protected override void OnPaint(PaintEventArgs pe)
+        #endregion
+
+        #region Methods
+        protected override void OnPaint(PaintEventArgs pe)  //paint generated
         {
             base.OnPaint(pe);
         }
         
-        protected override void WndProc(ref Message m)
+        protected override void WndProc(ref Message m)      //override windows? event that occurs in this textbox
         {
-            if (m.Msg == WM_PASTE)
+            if (m.Msg == WM_PASTE)      //sets paste flag as true if event was a paste of any kind
                 pasted = true;
 
-            base.WndProc(ref m);
+            base.WndProc(ref m);        //continues with typical textbox handling
         }
+        #endregion
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace FoodTracker_TextLoadDB
 {
-    public class DayEntry
+    public class DayEntry       //is a Day Entry containing info about a Day: The Date, Note, (basic)Actvity, a list of Meals(entries) that were consumed
     {
         #region Fields
         public List<MealEntry> _mealEntries
@@ -28,7 +28,7 @@ namespace FoodTracker_TextLoadDB
         #endregion
 
         #region Constructors
-        public DayEntry()
+        public DayEntry()       //init empty for Now(day it's created)
         {
             _mealEntries = new List<MealEntry>();
             _date = DateTime.Now;
@@ -38,7 +38,7 @@ namespace FoodTracker_TextLoadDB
             _carbsEntry = 0;
             _proteinEntry = 0;
         }
-        public DayEntry(DateTime date, List<MealEntry> mealEntries, Note note)
+        public DayEntry(DateTime date, List<MealEntry> mealEntries, Note note)      //init that calculates macro values
         {
             _mealEntries = mealEntries;
             _date = date;
@@ -48,57 +48,57 @@ namespace FoodTracker_TextLoadDB
             _carbsEntry = calcCarbs();
             _proteinEntry = calcProtein();
         }
-        public DayEntry(DateTime date, List<MealEntry> mealEntries, Note note, double fat, double carbs, double protein) : this(date, mealEntries, note)
+        public DayEntry(DateTime date, List<MealEntry> mealEntries, Note note, double fat, double carbs, double protein) : this(date, mealEntries, note)    //init that gets most values
         {
             _fatEntry = fat;
             _carbsEntry = carbs;
             _proteinEntry = protein;
         }
-        public DayEntry(List<MealEntry> mealEntries, Match match)
+        public DayEntry(List<MealEntry> mealEntries, Match match)   //init day entry by a Regex match(from any food entry text) with several groups for respective values
         {
             _mealEntries = mealEntries;
             _activ = "";
 
             String[] strd = match.Groups["Date"].Value.Split('/');
-            _date = new DateTime(Convert.ToInt32(strd[2]), Convert.ToInt32(strd[1]), Convert.ToInt32(strd[0]));
+            _date = new DateTime(Convert.ToInt32(strd[2]), Convert.ToInt32(strd[1]), Convert.ToInt32(strd[0]));     //date format: 27/03/2020
 
             _note = new Note(match.Groups["Note"].Value);
 
-            String[] strm = match.Groups["Macros"].Value.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
+            String[] strm = match.Groups["Macros"].Value.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);   //macros format: 111||111||111
             _fatEntry = Convert.ToDouble(strm[0]);
             _carbsEntry = Convert.ToDouble(strm[1]);
             _proteinEntry = Convert.ToDouble(strm[2]);
 
-            checkAndCorrect();
+            setCalculatedValues();      //Replaces current macro values with calculated ones
         }
         #endregion
 
         #region Add/Set
-        public void addMealEntry(MealEntry mealEntry)
+        public void addMealEntry(MealEntry mealEntry)   //adds a meal entry
         {
             _mealEntries.Add(mealEntry);
         }
-        public void setDate(String groupDate)
+        public void setDate(String groupDate)   //sets new date
         {
             String[] strd = groupDate.Split('/');
             _date = new DateTime(Convert.ToInt32(strd[2]), Convert.ToInt32(strd[1]), Convert.ToInt32(strd[0]));
         }
-        public void setNote(String groupNote)
+        public void setNote(String groupNote)   //sets new note
         {
             _note = new Note(groupNote);
         }
-        public void setActiv(String groupActiv)
+        public void setActiv(String groupActiv)     //sets basic activity
         {
             _activ = groupActiv;
         }
-        public void setEntryMacros(String groupMacros)
+        public void setEntryMacros(String groupMacros)  //sets current macro values
         {
             String[] strm = groupMacros.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
             _fatEntry = Convert.ToDouble(strm[0]);
             _carbsEntry = Convert.ToDouble(strm[1]);
             _proteinEntry = Convert.ToDouble(strm[2]);
         }
-        public void setMatchValues(Match match)
+        public void setMatchValues(Match match)     //sets a batch of values through a match with groups
         {
             setDate(match.Groups["Date"].Value);
             setNote(match.Groups["Note"].Value);
@@ -107,75 +107,45 @@ namespace FoodTracker_TextLoadDB
         #endregion
 
         #region Math
-        public double calcFat()
+        public double calcFat()     //calculates fat values by adding values from all meal entries
         {
             double fat = 0;
             foreach (MealEntry fe in _mealEntries)
                 fat += fe._fatEntry;
             return fat;
         }
-        public double calcCarbs()
+        public double calcCarbs()   //calculates carbs values by adding values from all meal entries
         {
             double carbs = 0;
             foreach (MealEntry fe in _mealEntries)
                 carbs += fe._carbsEntry;
             return carbs;
         }
-        public double calcProtein()
+        public double calcProtein() //calculates protein values by adding values from all meal entries
         {
             double protein = 0;
             foreach (MealEntry fe in _mealEntries)
                 protein += fe._proteinEntry;
             return protein;
         }
-        public bool checkMacroEntries()
+        public void setCalculatedValues()   //Replaces current macro entries with calculated ones
         {
-            double calc = calcFat();
-            if (Math.Abs(_fatEntry - calc) > calc * 1 / 20 && calc > 1)
-                return false;
-            calc = calcCarbs();
-            if (Math.Abs(_carbsEntry - calc) > calc * 1 / 20 && calc > 1)
-                return false;
-            calc = calcProtein();
-            if (Math.Abs(_proteinEntry - calc) > calc * 1 / 20 && calc > 1)
-                return false;
-            return true;
-        }
-        public bool checkAndCorrect()
-        {
-            double calc = calcFat();
-            bool correct = true;
-            if (Math.Abs(_fatEntry - calc) > calc * 1 / 20 && calc > 1)
-            {
-                _fatEntry = calc;
-                correct = false;
-            }
-            calc = calcCarbs();
-            if (Math.Abs(_carbsEntry - calc) > calc * 1 / 20 && calc > 1)
-            {
-                _carbsEntry = calc;
-                correct = false;
-            }
-            calc = calcProtein();
-            if (Math.Abs(_proteinEntry - calc) > calc * 1 / 20 && calc > 1)
-            {
-                _proteinEntry = calc;
-                correct = false;
-            }
-            return correct;
+            _fatEntry = calcFat();
+            _carbsEntry = calcCarbs();
+            _proteinEntry = calcProtein();
         }
         #endregion
 
         #region Printing
-        public String getMacros()
+        public String getMacros()   //get current macros in string format: 11/11/11
         {
             return _fatEntry + "/" + _carbsEntry + "/" + _proteinEntry;
         }
-        public String getCalcMacros()
+        public String getCalcMacros()   //get calculated macros in string format: 11/11/11
         {
             return calcFat() + "/" + calcCarbs() + "/" + calcProtein();
         }
-        public override String ToString()
+        public override String ToString()   //gets all data(including meals and their food) in string format
         {
             String res = "";
             foreach (MealEntry mealEntry in _mealEntries)
@@ -186,7 +156,7 @@ namespace FoodTracker_TextLoadDB
             res += "-----------";
             return res;
         }
-        public String ToStringLite()
+        public String ToStringLite()    //gets data except meals in string format
         {
             String res = "";
             if(_activ!="")
@@ -197,7 +167,7 @@ namespace FoodTracker_TextLoadDB
         }
         #endregion
 
-        public DayEntry Clone()
+        public DayEntry Clone() //return a New copy of this object with the same values
         {
             List<MealEntry> ml = new List<MealEntry>();
             foreach (var meal in this._mealEntries)

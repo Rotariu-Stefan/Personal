@@ -127,6 +127,10 @@ namespace FoodTracker_TextLoadDB
         }
         public override bool Equals(object obj)     //perform Equals test on 2 foods by name and brand
         {
+            if (this is null && obj is null)
+                return true;
+            if (obj is null || obj is null)
+                return false;
             if (obj == DBNull.Value)
                 return false;
             FoodItem f2 = (FoodItem)obj;
@@ -145,7 +149,7 @@ namespace FoodTracker_TextLoadDB
                 return true;
             if (f2 is null)
                 return false;
-            return (f1._name + f1._brand).CompareTo(f2._name + f2._brand) == -1;    //if first name+brand is before the 2nd
+            return (f1._name + f1._brand).ToLower().CompareTo((f2._name + f2._brand).ToLower()) < 0;    //if first name+brand is before the 2nd
         }
         public static bool operator >(FoodItem f1, FoodItem f2)     //perform > test on 2 foods by name and brand
         {
@@ -153,7 +157,7 @@ namespace FoodTracker_TextLoadDB
                 return false;
             if (f2 is null && !(f1 is null))
                 return true; ;
-            return (f1._name + f1._brand).CompareTo(f2._name + f2._brand) == 1;     //if first name+brand is after the 2nd
+            return (f1._name + f1._brand).ToLower().CompareTo((f2._name + f2._brand).ToLower()) > 0;     //if first name+brand is after the 2nd
         }
         #endregion
     }

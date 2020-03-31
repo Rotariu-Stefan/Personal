@@ -133,8 +133,6 @@ namespace FoodTracker_TextLoadDB
                 {
                     fe = new FoodEntry(m);
                     lfe.Add(fe);
-                    if (!Foods.Contains(fe._food))
-                        Foods.Add(fe._food);
 
                     //output.AppendText(line + " <----- ENTRY\n");
                 }
@@ -168,7 +166,8 @@ namespace FoodTracker_TextLoadDB
                 }
                 else if ((m = regexDishResult.Match(line)).Success)        //matches Dish definition values after the food list format: >===1 Pizza @eu 11/11/11
                 {
-                    Foods.Add(new Dish(lfe, m));
+                    FoodItem dtemp = new Dish(lfe, m);
+                    insertOrRefFood(ref dtemp);
                     lfe = new List<FoodEntry>();
 
                     //output.AppendText(line + " <----- DISH\n");
@@ -212,7 +211,7 @@ namespace FoodTracker_TextLoadDB
         {
             output.AppendText("\nAll Currect Food Items:\n\n");
             foreach (FoodItem food in Foods)
-                output.AppendText(food is Dish ? (food as Dish).ToStringListed(): food.ToStringNice() + "\n\n");
+                output.AppendText(food is Dish ? (food as Dish).ToStringListed() : food.ToStringNice() + "\n\n");
         }
         private void button_clear_Click(object sender, EventArgs e)     //clears output of text
         {
@@ -266,19 +265,20 @@ namespace FoodTracker_TextLoadDB
         {
             if (food != null)
             {
-                if (Foods.Count == 0 || food > Foods.Last())    //if food is bigger(alphabetically) to last Item in Foods
+                if (Foods.Count == 0 || food > Foods.Last())    //if food is bigger(alphabetically) to last Item in Foods add it
                     Foods.Add(food);
                 else
                 {
                     for (int i = 0; i < Foods.Count; i++)
                     {
-                        if (Foods[i] < food) continue;          //keep searching to find index while food is smaller than current index
-                        if (Foods[i] == food)                   //if the Same food is found in list references food given to the one in the list
+                        if (Foods[i] < food)            //keep searching to find index while food is smaller than current index
+                            continue;          
+                        if (Foods[i] == food)           //if the Same food is found in list references food given to the one in the list
                         {
                             food = Foods[i];
                             break;
                         }
-                        if (Foods[i] > food)                    //if food passed the index where it would have to be(but isn't), it inserts it there
+                        if (Foods[i] > food)            //if food passed the index where it would have to be(but isn't), it inserts it there
                         {
                             Foods.Insert(i, food);
                             break;
@@ -443,6 +443,7 @@ namespace FoodTracker_TextLoadDB
             output.AppendText($"TESTING...\n");
             Stopwatch timer = Stopwatch.StartNew();
 
+            output.AppendText("" + "xasd".CompareTo("dsa") + "!!");
 
             timer.Stop();
             output.AppendText($"\n...DONE! ({timer.Elapsed})\n");

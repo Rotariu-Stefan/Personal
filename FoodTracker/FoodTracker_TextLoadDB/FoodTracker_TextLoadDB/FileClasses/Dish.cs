@@ -20,12 +20,11 @@ namespace FoodTracker_TextLoadDB
             base(name, brand, fat, carbs, protein, measure) => ingredients = new List<FoodEntry>();
         public Dish(List<FoodEntry> foods, Match match) : base(match)   //init dish with regex match for food item values plus list of food entries ingredients
         {
-            ingredients = new List<FoodEntry>();
-            addFoodEntries(foods);
+            ingredients = foods;
         }
         #endregion
 
-        #region Adds    //various ways to add an ingredient to list        
+        #region Adds    //various ways to add an ingredient to list
         public void addFoodEntry(FoodEntry foodEntry)
         {
             ingredients.Add(foodEntry);
@@ -37,10 +36,6 @@ namespace FoodTracker_TextLoadDB
         public void addFoodEntry(String foodEntryStr)
         {
             ingredients.Add(new FoodEntry(foodEntryStr));
-        }
-        public void addFoodEntries(List<FoodEntry> foods)
-        {
-            ingredients.AddRange(foods.ToArray());
         }
         #endregion
 

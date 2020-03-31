@@ -57,10 +57,17 @@ namespace FoodTracker_TextLoadDB
 
             comboBox_measure.SelectedIndex = 0;
             listBox_foodItems.Items.AddRange(MainForm.Foods.ToArray());     //populated listbox with items from Foods
-            if(listBox_foodItems.Items.Count!=0)
+            if (listBox_foodItems.Items.Count != 0)
                 listBox_foodItems.SelectedIndex = 0;
             comboBox_meals.DataSource = new BindingSource(_day._mealEntries, "");   //populates combobox with meals from current day with bindingsource for detect changes
             comboBox_meals.ValueMember = "_name";
+            if (_day._mealEntries.Count > 0)
+            {
+                comboBox_meals.SelectedItem = _day._mealEntries.Last();
+                textBox_amount.ReadOnly = false;
+                textBox_searchFood.ReadOnly = false;
+
+            }
 
             updateDay();        //calls method that updates various UI things to corespond with changed data
         }
@@ -118,9 +125,10 @@ namespace FoodTracker_TextLoadDB
                 textBox_noteMealText.Clear();
                 button_addFood.Enabled = false;
                 button_setMealNote.Enabled = false;
-                textBox_amount.ReadOnly = true;
-                textBox_searchFood.ReadOnly = true;
                 button_setMealPortion.Enabled = false;
+                radio_list.Checked = true;
+                textBox_amount.ReadOnly = true;
+                textBox_searchFood.ReadOnly = true;                
             }
             else
             {
@@ -128,9 +136,8 @@ namespace FoodTracker_TextLoadDB
                 textBox_noteMealText.Text= (comboBox_meals.SelectedItem as MealEntry)._note._text;
                 button_addFood.Enabled = true;
                 button_setMealNote.Enabled = true;
-                textBox_amount.ReadOnly = false;
-                textBox_searchFood.ReadOnly = false;
                 button_setMealPortion.Enabled = true;
+                radio_list.Checked = true;
             }
         }
         #endregion
@@ -230,12 +237,13 @@ namespace FoodTracker_TextLoadDB
                 textBox_foodName.Focus();
             }
 
-            if ( food != null)                  //updates MealEntry and FoodEntry calculated values(does the math for macros)
+            if (food != null)                  //updates MealEntry and FoodEntry calculated values(does the math for macros)
             {
                 ((MealEntry)comboBox_meals.SelectedItem).setCalculatedValues();
                 _day.setCalculatedValues();
-                ((BindingSource)comboBox_meals.DataSource).ResetBindings(false);
+                //((BindingSource)comboBox_meals.DataSource).ResetBindings(false);  TODO:HUH??
             }
+
             updateDay();
         }
         private void button_search_Click(object sender, EventArgs e)    //search for food in Listbox by text in search textbox(automatically called for every key typed) and selects 1st results

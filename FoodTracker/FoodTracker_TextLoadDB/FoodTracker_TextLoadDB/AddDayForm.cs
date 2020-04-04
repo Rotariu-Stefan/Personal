@@ -61,13 +61,6 @@ namespace FoodTracker_TextLoadDB
                 listBox_foodItems.SelectedIndex = 0;
             comboBox_meals.DataSource = new BindingSource(_day._mealEntries, "");   //populates combobox with meals from current day with bindingsource for detect changes
             comboBox_meals.ValueMember = "_name";
-            if (_day._mealEntries.Count > 0)
-            {
-                comboBox_meals.SelectedItem = _day._mealEntries.Last();
-                textBox_amount.ReadOnly = false;
-                textBox_searchFood.ReadOnly = false;
-
-            }
 
             updateDay();        //calls method that updates various UI things to corespond with changed data
         }
@@ -125,10 +118,7 @@ namespace FoodTracker_TextLoadDB
                 textBox_noteMealText.Clear();
                 button_addFood.Enabled = false;
                 button_setMealNote.Enabled = false;
-                button_setMealPortion.Enabled = false;
-                radio_list.Checked = true;
-                textBox_amount.ReadOnly = true;
-                textBox_searchFood.ReadOnly = true;                
+                button_setMealPortion.Enabled = false;              
             }
             else
             {
@@ -137,7 +127,6 @@ namespace FoodTracker_TextLoadDB
                 button_addFood.Enabled = true;
                 button_setMealNote.Enabled = true;
                 button_setMealPortion.Enabled = true;
-                radio_list.Checked = true;
             }
         }
         #endregion
@@ -187,6 +176,12 @@ namespace FoodTracker_TextLoadDB
         }
         private void button_addFood_Click(object sender, EventArgs e)   //adds a new food(or references from Foods through the process of FoodEntry init) to selected meal
         {
+            MealEntry meal = comboBox_meals.SelectedItem as MealEntry;
+            if (meal == null)
+            {
+                MessageBox.Show("No Meal Selected!");
+                return;
+            }
             if (textBox_amount.Text == "")      //checks amount
             {
                 MessageBox.Show("Needs Amount!");
@@ -197,7 +192,7 @@ namespace FoodTracker_TextLoadDB
             {
                 food = (FoodItem)listBox_foodItems.SelectedItem;
                 if (food != null)
-                    _day._mealEntries[comboBox_meals.SelectedIndex].addFoodEntry(new FoodEntry(food, Convert.ToDouble(textBox_amount.Text)));
+                    meal.addFoodEntry(new FoodEntry(food, Convert.ToDouble(textBox_amount.Text)));
                 else
                     MessageBox.Show("Invalid Selection for Food!");
                 textBox_amount.Clear();
@@ -208,7 +203,7 @@ namespace FoodTracker_TextLoadDB
             {
                 if (MainForm.regexEntry.Match(textBox_pattern.Text).Success)
                 {
-                    _day._mealEntries[comboBox_meals.SelectedIndex].addFoodEntry(new FoodEntry(textBox_pattern.Text));
+                    meal.addFoodEntry(new FoodEntry(textBox_pattern.Text));
                     food = _day._mealEntries[comboBox_meals.SelectedIndex]._foodEntries.Last()._food;
                 }
                 else
@@ -223,7 +218,7 @@ namespace FoodTracker_TextLoadDB
                     food = new FoodItem(textBox_foodName.Text, textBox_brand.Text,
                         Convert.ToDouble(textBox_fat.Text), Convert.ToDouble(textBox_carbs.Text), Convert.ToDouble(textBox_protein.Text),
                         (Measure)comboBox_measure.SelectedIndex);
-                    _day._mealEntries[comboBox_meals.SelectedIndex].addFoodEntry(new FoodEntry(food, Convert.ToDouble(textBox_amount.Text)));
+                    meal.addFoodEntry(new FoodEntry(food, Convert.ToDouble(textBox_amount.Text)));
                 }
                 catch(Exception ex)
                 {
@@ -241,7 +236,6 @@ namespace FoodTracker_TextLoadDB
             {
                 ((MealEntry)comboBox_meals.SelectedItem).setCalculatedValues();
                 _day.setCalculatedValues();
-                //((BindingSource)comboBox_meals.DataSource).ResetBindings(false);  TODO:HUH??
             }
 
             updateDay();

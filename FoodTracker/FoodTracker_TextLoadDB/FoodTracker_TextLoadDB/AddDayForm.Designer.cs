@@ -386,7 +386,6 @@
             // 
             this.textBox_searchFood.Location = new System.Drawing.Point(100, 246);
             this.textBox_searchFood.Name = "textBox_searchFood";
-            this.textBox_searchFood.ReadOnly = true;
             this.textBox_searchFood.Size = new System.Drawing.Size(184, 20);
             this.textBox_searchFood.TabIndex = 8;
             this.textBox_searchFood.TextChanged += new System.EventHandler(this.textBox_searchFood_TextChanged);
@@ -533,7 +532,6 @@
             this.textBox_amount.Location = new System.Drawing.Point(141, 208);
             this.textBox_amount.Name = "textBox_amount";
             this.textBox_amount.pasted = false;
-            this.textBox_amount.ReadOnly = true;
             this.textBox_amount.Size = new System.Drawing.Size(40, 20);
             this.textBox_amount.TabIndex = 9;
             this.textBox_amount.TextChanged += new System.EventHandler(this.textBox_amount_TextChanged);
